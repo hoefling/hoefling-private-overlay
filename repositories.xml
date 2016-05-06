@@ -1,12 +1,13 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<repositories encoding="UTF-8" version="1.1">
+<repositories encoding="unicode" version="1.1">
 	<repo priority="50" quality="experimental">
 		<name>hoefling-private</name>
-		<description>hoefling's local overlay for custom ebuilds</description>
+		<description>hoefling's private overlay</description>
+		<homepage>https://github.com/Manmadescience/hoefling-private-overlay</homepage>
 		<owner>
 			<email>oleg.hoefling@gmail.com</email>
 			<name>hoefling</name>
 		</owner>
+		<source type="git">git@github.com:Manmadescience/hoefling-private-overlay.git</source>
 		<source type="git">file:///home/hoefling/programming/misc/overlays/hoefling-private</source>
 	</repo>
 </repositories>
