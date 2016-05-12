@@ -8,6 +8,5 @@
 			<name>hoefling</name>
 		</owner>
 		<source type="git">git@github.com:Manmadescience/hoefling-private-overlay.git</source>
-		<source type="git">file:///home/hoefling/programming/misc/overlays/hoefling-private</source>
 	</repo>
 </repositories>
