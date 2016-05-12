@@ -2,5 +2,10 @@
 GIT_DIR=$(git rev-parse --show-toplevel)
 REPO_NAME=$(cat $GIT_DIR/profiles/repo_name)
 
-cp $GIT_DIR/repositories.xml /etc/layman/overlays/$REPO_NAME.xml
+#cp $GIT_DIR/repositories.xml /etc/layman/overlays/$REPO_NAME.xml
+# attach local repo string because netqa server blocks portage/layman connections
+# find last source entry and attach ref to local git repo
+LINE=$(grep -n '</source>' repositories.xml | awk -F: '{print $1}')
+SRC_LOCAL="<source type=\"git\">file://$GIT_DIR</source>"
+sed -e "${LINE}s%$%\n\t\t$SRC_LOCAL%" $GIT_DIR/repositories.xml > /etc/layman/overlays/$REPO_NAME.xml
 layman -S -a $REPO_NAME
