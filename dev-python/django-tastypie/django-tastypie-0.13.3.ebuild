@@ -12,7 +12,7 @@ HOMEPAGE="https://pypi.python.org/pypi/django-tastypie/ https://github.com/toast
 SRC_URI="https://github.com/toastdriven/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64 ~x86"
-IUSE="bip doc test xml"
+IUSE="bip doc test +xml"
 
 LICENSE="BSD"
 SLOT="0"
