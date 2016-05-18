@@ -12,7 +12,7 @@ HOMEPAGE="https://pypi.python.org/pypi/django-tastypie/ https://github.com/toast
 SRC_URI="https://github.com/toastdriven/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64 ~x86"
-IUSE="bip doc test"
+IUSE="bip doc test xml"
 
 LICENSE="BSD"
 SLOT="0"
@@ -29,6 +29,10 @@ RDEPEND="${COMMON_DEPEND}
 
 #dev-python/pyyaml is pulled in with django itself
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
+	xml? ( ${COMMON_DEPEND}
+		dev-python/lxml[${PYTHON_USEDEP}]
+		dev-python/defusedxml[${PYTHON_USEDEP}] )
+
 	test? (	${COMMON_DEPEND}
 		dev-python/lxml[${PYTHON_USEDEP}]
 		dev-python/coverage[${PYTHON_USEDEP}]
