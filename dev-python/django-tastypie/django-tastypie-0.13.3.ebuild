@@ -12,7 +12,7 @@ HOMEPAGE="https://pypi.python.org/pypi/django-tastypie/ https://github.com/toast
 SRC_URI="https://github.com/toastdriven/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64 ~x86"
-IUSE="bip doc test +xml"
+IUSE="bip doc test +xml yaml"
 
 LICENSE="BSD"
 SLOT="0"
@@ -24,20 +24,28 @@ COMMON_DEPEND=">=dev-python/mimeparse-0.1.4[${PYTHON_USEDEP}]
 		>=dev-python/django-1.7[${PYTHON_USEDEP}]
 		<dev-python/django-1.10[${PYTHON_USEDEP}]"
 
+XML_DEPS="
+	dev-python/lxml[${PYTHON_USEDEP}]
+	dev-python/defusedxml[${PYTHON_USEDEP}]"
+
+YAML_DEPS="
+	dev-python/pyyaml[${PYTHON_USEDEP}]"
+
 RDEPEND="${COMMON_DEPEND}
 		bip? ( dev-python/biplist[${PYTHON_USEDEP}] )"
 
 #dev-python/pyyaml is pulled in with django itself
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
 	xml? ( ${COMMON_DEPEND}
-		dev-python/lxml[${PYTHON_USEDEP}]
-		dev-python/defusedxml[${PYTHON_USEDEP}] )
+		${XML_DEPS} )
+
+	yaml? ( ${COMMON_DEPEND}
+		${YAML_DEPS} )
 
 	test? (	${COMMON_DEPEND}
-		dev-python/lxml[${PYTHON_USEDEP}]
+		${XML_DEPS}
+		${YAML_DEPS}
 		dev-python/coverage[${PYTHON_USEDEP}]
-		dev-python/pyyaml[${PYTHON_USEDEP}]
-		dev-python/defusedxml[${PYTHON_USEDEP}]
 		$(python_gen_cond_dep '>=dev-python/mock-1.1.0[${PYTHON_USEDEP}]' python2_7)
 		>=dev-python/pytz-2013b[${PYTHON_USEDEP}] )
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}]
