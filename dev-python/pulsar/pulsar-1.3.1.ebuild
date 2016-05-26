@@ -30,16 +30,27 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="test"
+IUSE="doc examples test"
 
 RDEPEND=""
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-        test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
+	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
+	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
 # tests
 RESTRICT="test"
 
 python_test() {
         esetup.py test
+}
+
+python_install_all() {
+        #if use doc; then
+        #        local DOCS=( *.txt doc/*.txt )
+        #        local HTML_DOCS=( doc/html/. )
+        #fi
+        use examples && local EXAMPLES=( examples/. )
+
+        distutils-r1_python_install_all
 }
