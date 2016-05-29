@@ -34,6 +34,8 @@ DEPEND="${RDEPEND}
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
+DOCDIR="${S}/.builddocs"
+
 # tests
 RESTRICT="test"
 
@@ -42,11 +44,11 @@ python_test() {
 }
 
 python_compile_all() {
-        use doc && emake -C docs html BUILDDIR=docs/.build
+        use doc && emake -C docs html BUILDDIR=${DOCDIR}
 }
 
 python_install_all() {
-	use doc && local HTML_DOCS=( docs/.build/html/. )
+	use doc && local HTML_DOCS=( ${DOCDIR}/html/. )
         use examples && local EXAMPLES=( examples/. )
 
         distutils-r1_python_install_all
