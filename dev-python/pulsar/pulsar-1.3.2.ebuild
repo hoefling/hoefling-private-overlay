@@ -4,22 +4,13 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python3_{3,4,5} )
-
-EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
+PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 
 if [[ ${PV} = 9999 ]]; then
         GIT_ECLASS="git-r3"
         EXPERIMENTAL="true"
-fi
+	EGIT_REPO_URI="https://github.com/quantmind/${PN}.git"
 
-inherit distutils-r1 ${GIT_ECLASS}
-
-DESCRIPTION="Event driven framework for python"
-HOMEPAGE="https://github.com/quantmind/pulsar
-	https://pypi.python.org/pypi/pulsar"
-
-if [[ $PV == 9999 ]]; then
         SRC_URI=""
         KEYWORDS=""
 else
@@ -27,6 +18,12 @@ else
 		https://github.com/quantmind/${PN}/archive/${PV}.zip -> ${P}.zip"
 	KEYWORDS="~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 fi
+
+inherit distutils-r1 ${GIT_ECLASS}
+
+DESCRIPTION="Event driven framework for python"
+HOMEPAGE="https://github.com/quantmind/pulsar
+	https://pypi.python.org/pypi/pulsar"
 
 LICENSE="MIT"
 SLOT="0"
