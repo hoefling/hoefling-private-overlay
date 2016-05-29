@@ -6,17 +6,15 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 
-if [[ ${PV} = 9999 ]]; then
+if [[ ${PV} == "9999" ]]; then
         GIT_ECLASS="git-r3"
-        EXPERIMENTAL="true"
 	EGIT_REPO_URI="https://github.com/quantmind/${PN}.git"
-
         SRC_URI=""
         KEYWORDS=""
 else
 	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz
 		https://github.com/quantmind/${PN}/archive/${PV}.zip -> ${P}.zip"
-	KEYWORDS="~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 inherit distutils-r1 ${GIT_ECLASS}

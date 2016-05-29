@@ -6,8 +6,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 python3_{3,4,5} )
 
-if [[ ${PV} = 9999 ]]; then
-        EXPERIMENTAL="true"
+if [[ ${PV} == "9999" ]]; then
         GIT_ECLASS="git-r3"
 	EGIT_REPO_URI="https://github.com/quantmind/${PN}.git"
         SRC_URI=""
