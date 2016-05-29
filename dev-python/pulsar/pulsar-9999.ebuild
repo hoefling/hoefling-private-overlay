@@ -42,7 +42,7 @@ python_test() {
 }
 
 python_compile_all() {
-        use doc && emake -C docs html
+        use doc && emake -C docs html BUILDDIR=docs/.build
 }
 
 python_install_all() {
