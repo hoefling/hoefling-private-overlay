@@ -41,11 +41,12 @@ python_test() {
         esetup.py test
 }
 
+python_compile_all() {
+        use doc && emake -C docs html
+}
+
 python_install_all() {
-        #if use doc; then
-        #        local DOCS=( *.txt doc/*.txt )
-        #        local HTML_DOCS=( doc/html/. )
-        #fi
+	use doc && local HTML_DOCS=( docs/.build/html/. )
         use examples && local EXAMPLES=( examples/. )
 
         distutils-r1_python_install_all
