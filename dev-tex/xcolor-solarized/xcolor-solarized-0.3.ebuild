@@ -13,7 +13,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 S=${WORKDIR}/${P}
 IUSE=""
-DEPEND=""
+DEPEND="dev-texlive/texlive-latexextra"
 RDEPEND="dev-texlive/texlive-latex
 	dev-tex/xcolor"
 
