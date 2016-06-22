@@ -20,5 +20,5 @@ RDEPEND="dev-tex/xcolor-solarized
 src_install(){
 	latex-package_src_doinstall styles
 	insinto ${TEXMF}/tex/latex/${PN}/
-	doins ${PN}.sty
+	doins ${PN}.sty || die
 }
