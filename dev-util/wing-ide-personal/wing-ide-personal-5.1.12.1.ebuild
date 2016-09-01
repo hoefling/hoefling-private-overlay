@@ -45,26 +45,13 @@ src_install() {
 	cp -R ${WORKDIR}/usr/lib/wingide${MY_PV3}/* ${D}/${WINGHOME}/ || die "Install failed!"
 	dosym ${WINGHOME}/wing /usr/bin/wingide
 
-#	cat > wingide.desktop <<-EOF
-#		[Desktop Entry]
-#		Version=${PV}
-#		Type=Application
-#		Name=WingIDE
-#		Comment=Wing IDE - advanced Python IDE
-#		Exec=wingide
-#		Icon=wingide
-#		Categories=Development;
-#		MimeType=application/x-python;
-#	EOF
-
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
 		newins "${WORKDIR}"/usr/lib/wingide${MY_PV3}/resources/wing${res}.png wingide.png
 	done
 
-#	insinto /usr/share/applications/
-#	doins wingide.desktop
-
+	insinto ${WINGHOME}
+	doins "${FILESDIR}"/keymap.eclipse
 }
 
 pkg_postinst() {
