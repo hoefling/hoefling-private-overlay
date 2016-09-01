@@ -24,7 +24,6 @@
 'Ctrl-H': 'batch-search'
 'Ctrl-Shift-R': 'open-from-project'
 'Ctrl-Shift-C': 'comment-block-toggle'
-'Ctrl-SHift-C': 'uncomment-out-region'
 'Ctrl-|': 'indent-lines(lines=1)'
 'Shift-Tab': 'outdent-region'
 
@@ -77,7 +76,7 @@
 'Alt-Shift-Left': 'previous-document'
 
 # Approximations that may need work
-'Ctrl-E': 'show-panel(panel_type="open-files")'
+#'Ctrl-E': 'show-panel(panel_type="open-files")'
 'Ctrl-M': 'enter-fullscreen', 'exit-fullscreen'
 #'Ctrl-Shift-F': 'fill-paragraph'
 #'Alt-Shift-Up': 'select-more'
