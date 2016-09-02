@@ -5,11 +5,8 @@
 inherit eutils rpm versionator
 
 MY_PV=$(replace_version_separator 3 '-')
-#MY_PV1=${PV%.*}
-#MY_PV2=${PV%.*.*}
-#MY_PV3=${PV%.*.*.*}
 MY_PV_MAJOR=$(get_major_version)
-MY_PV1=${MY_PV/beta/b}
+MY_PV_WING_CONFORM_BETA=${MY_PV/beta/b}
 
 #MY_PV=$(replace_version_separator 3 '-')
 #MY_PV1=${PV%.*}
@@ -25,7 +22,7 @@ MY_PV1=${MY_PV/beta/b}
 
 DESCRIPTION="the intelligent development environment for python programmers"
 HOMEPAGE="http://www.wingware.com"
-SRC_URI="http://wingware.com/pub/wingide/prerelease/${MY_PV1}/wingide${MY_PV_MAJOR}-${MY_PV1}.x86_64.rpm"
+SRC_URI="http://wingware.com/pub/wingide/prerelease/${MY_PV_WING_CONFORM_BETA}/wingide${MY_PV_MAJOR}-${MY_PV_WING_CONFORM_BETA}.x86_64.rpm"
 
 LICENSE="WingIDE"
 SLOT="0"
@@ -41,7 +38,7 @@ src_unpack () {
 	einfo "${PR}"
 	einfo "${PVR}"
 	rpm_src_unpack ${A}
-	sed -i -e "s:/usr/lib/wingide${MY_PV3}:${WINGHOME}:g" usr/lib/wingide${MY_PV3}/wing || die
+	sed -i -e "s:/usr/lib/wingide${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/wingide${MY_PV_MAJOR}/wing || die
 }
 
 
@@ -51,12 +48,12 @@ src_compile() {
 
 src_install() {
 	dodir ${WINGHOME}
-	cp -R ${WORKDIR}/usr/lib/wingide${MY_PV3}/* ${D}/${WINGHOME}/ || die "Install failed!"
+	cp -R ${WORKDIR}/usr/lib/wingide${MY_PV_MAJOR}/* ${D}/${WINGHOME}/ || die "Install failed!"
 	dosym ${WINGHOME}/wing /usr/bin/wingide
 
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
-		newins "${WORKDIR}"/usr/lib/wingide${MY_PV3}/resources/wing${res}.png wingide.png
+		newins "${WORKDIR}"/usr/lib/wingide${MY_PV_MAJOR}/resources/wing${res}.png wingide.png
 	done
 
 	insinto ${WINGHOME}
