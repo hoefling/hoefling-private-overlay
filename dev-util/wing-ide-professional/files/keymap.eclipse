@@ -1,0 +1,128 @@
+# Customized keymapping
+
+# Key mapping for 'eclipse' editor personality.  See the file 
+# keymap.basic for format and usage details.
+
+# Based on http://help.eclipse.org/indigo/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Freference%2Fref-keybindings.htm
+# and http://eclipse-tools.sourceforge.net/Keyboard_shortcuts_%283.0%29.pdf
+
+%include keymap.basic
+%include keymap.normal
+
+'Ctrl-E': 'delete-line'
+'Ctrl-Enter': 'new-line-before'
+'Shift-Enter': 'new-line-after'
+
+'Ctrl-Shift-Down': 'duplicate-line'
+'Ctrl-Shift-Up': 'duplicate-line-above'
+
+'Ctrl-Alt-Up': 'move-line-up(indent=True)'
+'Ctrl-Alt-Down': 'move-line-down(indent=True)'
+
+'Ctrl-O': 'find-symbol'
+'Ctrl-G': 'goto-line'
+'Ctrl-H': 'batch-search'
+'Ctrl-Shift-R': 'open-from-project'
+'Ctrl-Shift-C': 'comment-block-toggle'
+'Ctrl-|': 'indent-lines(lines=1)'
+'Shift-Tab': 'outdent-region'
+
+'Ctrl-Shift-F2': 'close-all'
+'Ctrl-Shift-F4': 'close-all'
+'Ctrl-Shift-W': 'close-all'
+'Ctrl-Shift-S': 'save-all'
+'Alt-Enter': 'view-file-properties'
+
+'Ctrl-F3': 'search-forward'
+'Ctrl-Shift-F3': 'search-backward'
+'Ctrl-J': 'isearch-forward'
+'Ctrl-Shift-J': 'isearch-backward'
+
+'F3': 'goto-selected-symbol-defn'
+'Ctrl-G': 'goto-selected-symbol-defn'
+'Ctrl-Shift-T': 'find-symbol-in-project'
+'Ctrl-Shift-U': 'batch-search(look_in="Current File")'
+'Ctrl-Shift-G': 'find-points-of-use'
+
+#'F2': 'rename-symbol'
+'Ctrl-R': 'rename-symbol'
+'Alt-Shift-L': 'move-symbol'
+'Alt-Shift-M': 'extract-def'
+'Alt-Shift-V': 'introduce-variable'
+
+'Ctrl-U': 'execute-file'
+'Ctrl-Shift-I': 'debug-stop'
+'Shift-F5': 'debug-file'
+'F5': 'debug-continue'
+'Ctrl-R': 'run-to-cursor'
+'F6': 'step-into'
+'F8': 'step-over-statement'
+'F7': 'step-out'
+'Ctrl-Shift-B': 'break-set', 'break-clear'
+
+'Ctrl-Minus': 'fold-collapse-current'
+'Ctrl-Plus': 'fold-expand-current'
+'Ctrl-Asterisk': 'fold-expand-all'
+'Ctrl-Slash': 'fold-toggle'
+
+'Ctrl-Shift-Insert': 'toggle-overtype'
+
+'Ctrl-Shift-Y': 'upper-case'
+'Ctrl-Shift-X': 'lower-case'
+
+'F12': 'focus-current-editor'
+'Ctrl-Shift-E': 'focus-current-editor'
+'Alt-Shift-Right': 'next-document'
+'Alt-Shift-Left': 'previous-document'
+
+# Approximations that may need work
+#'Ctrl-E': 'show-panel(panel_type="open-files")'
+'Ctrl-M': 'enter-fullscreen', 'exit-fullscreen'
+#'Ctrl-Shift-F': 'fill-paragraph'
+#'Alt-Shift-Up': 'select-more'
+#'Alt-Shift-Down': 'select-less'
+#'Alt-Shift-Right': 'next-statement'
+#'Alt-Shift-Left': 'previous-statement'
+#'Ctrl-Shift-Down': 'next-scope'
+#'Ctrl-Shift-Up': 'previous-scope'
+'Alt-Left': 'visit-history-previous'
+'Alt-Right': 'visit-history-next'
+'Ctrl-Q': 'visit-history-previous'
+'Ctrl-Shift-Space': 'show-panel(panel_type="source-assistant")'
+'Ctrl-Shift-P': 'brace-match'
+'F4': 'show-panel(panel_type="browser")'
+'Alt-Shift-T': 'show-panel(panel_type="refactoring")'
+'Alt-Shift-O': 'show_preferences_gui(prefname="edit.highlight-occurrences")'
+'Alt-Shift-U': 'show_preferences_gui(prefname="edit.highlight-occurrences")'
+
+# Commands that are not yet implemented
+#'Ctrl-1': 'show-refactoring-menu'
+#'Ctrl-Space': 'show-content-assistant'
+#'Ctrl-1': 'quick-fix'
+#'Ctrl-Shift-Q': 'quick-diff-toggle'
+#'F4': 'show-selected-symbol-in-browser'
+#'Shift-F2': 'show-selected-symbol-docs'
+#'Ctrl-Shift-H': 'find-symbol(open_in="browser")'
+#'Ctrl-.': 'next-code-warning'
+#'Ctrl-,': 'previous-code-warning'
+#'Ctrl-B': 'run-build-command'
+#'Ctrl-Shift-I': 'clean-up-imports'
+#'Ctrl-Shift-M': 'introduce-import'
+#'Alt-Shift-Z': 'undo-refactor'
+#'Alt-Shift-Y': 'redo-refactor'
+#'Alt-Shift-I': 'unextract-def'
+#'Alt-Shift-C': 'change-arguments'
+#'Alt-Shift-F': 'convert-to-attribute'
+#'Ctrl-Alt-H': 'show-call-hierarchy'
+#'Ctrl-F3': '?' -- open structure
+#'Ctrl-T': 'quick-hierarchy'
+#'Ctrl-O': 'quick-outline'
+#'Ctrl-Shift-D': 'run-display?'
+#'Ctrl-F11': 'execute-recent-file'
+#'Shift-F5': 'toggle-step-filters'
+#'Alt-Shift-J': 'add-javadoc-comment?'
+#'Alt-Shift-S': 'quick-source-menu'
+#'Ctrl-Shift-F8': 'next-perspective'
+#'Ctrl-Shift-F7': 'previous-view'
+#'Ctrl-F10': 'show-context-menu'
+#'Alt-_': 'show-system-menu'
