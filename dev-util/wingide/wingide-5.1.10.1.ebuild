@@ -47,7 +47,7 @@ src_install() {
 
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
-		newins "${WORKDIR}"/usr/lib/${PN}${MY_PV3}/resources/wing${res}.png wingide.png
+		newins "${WORKDIR}"/usr/lib/${PN}${MY_PV3}/resources/wing${res}.png ${PN}${MY_PV3}.png
 	done
 
 	insinto ${WINGHOME}
