@@ -32,7 +32,7 @@ S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
-	sed -i -e "s:/usr/lib/${PN}${MY_PV3}:${WINGHOME}:g" usr/lib/${MY_PV3}${MY_PV3}/wing || die
+	sed -i -e "s:/usr/lib/${PN}${MY_PV3}:${WINGHOME}:g" usr/lib/${PN}${MY_PV3}/wing || die
 }
 
 
