@@ -48,6 +48,18 @@ src_install() {
 	cp -R ${WORKDIR}/usr/lib/${PN}${MY_PV_MAJOR}/* ${D}/${WINGHOME}/ || die "Install failed!"
 	dosym ${WINGHOME}/wing /usr/bin/${PN}${MY_PV_MAJOR}
 
+	cat <<-EOF > wingide.desktop
+		[Desktop Entry]
+		Version=${PV}
+		Type=Application
+		Name=WingIDE
+		Comment=Wingware Python IDE: Python IDE for Python Developers
+		Exec=${PN}${MY_PV_MAJOR}
+		Icon=wingide
+		Categories=Development;
+		MimeType=application/x-python;
+	EOF
+
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
 		newins "${WORKDIR}"/usr/lib/${PN}${MY_PV_MAJOR}/resources/wing${res}.png wingide.png
@@ -55,6 +67,9 @@ src_install() {
 
 	insinto ${WINGHOME}
 	doins "${FILESDIR}"/keymap.eclipse
+
+        insinto /usr/share/applications/
+        doins wingide.desktop
 }
 
 pkg_postinst() {

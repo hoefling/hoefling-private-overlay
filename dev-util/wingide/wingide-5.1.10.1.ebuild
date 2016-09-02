@@ -52,6 +52,21 @@ src_install() {
 
 	insinto ${WINGHOME}
         doins "${FILESDIR}"/keymap.eclipse
+
+	cat > wingide.desktop <<-EOF
+		[Desktop Entry]
+		Version=${PV}
+		Type=Application
+		Name=WingIDE
+		Comment=Wingware Python IDE: Python IDE for Python Developers
+		Exec=${PN}${MY_PV3}
+		Icon=wingide
+		Categories=Development;
+		MimeType=application/x-python;
+	EOF
+
+        insinto /usr/share/applications/
+        doins wingide.desktop
 }
 
 pkg_postinst() {
