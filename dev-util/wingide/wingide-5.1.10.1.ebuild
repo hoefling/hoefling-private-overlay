@@ -17,8 +17,8 @@ MY_PV3=${PV%.*.*.*}
 DESCRIPTION="Wing IDE is advanced Python IDE."
 HOMEPAGE="http://www.wingware.com"
 SRC_URI="
-	  x86? ( http://wingware.com/pub/wingide/${MY_PV1}/wingide${MY_PV3}-${MY_PV}.i386.rpm )
-	  amd64? ( http://wingware.com/pub/wingide/${MY_PV1}/wingide${MY_PV3}-${MY_PV}.x86_64.rpm )
+	  x86? ( http://wingware.com/pub/${PN}/${MY_PV1}/${PN}${MY_PV3}-${MY_PV}.i386.rpm )
+	  amd64? ( http://wingware.com/pub/${PN}/${MY_PV1}/${PN}${MY_PV3}-${MY_PV}.x86_64.rpm )
 "
 
 LICENSE="WingIDE"
@@ -27,12 +27,12 @@ KEYWORDS="~x86 ~amd64"
 
 DEPEND=">=dev-lang/python-2.0.0"
 
-WINGHOME="/opt/${PN}"
+WINGHOME="/opt/${PN}${MY_PV3}"
 S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
-	sed -i -e "s:/usr/lib/wingide${MY_PV3}:${WINGHOME}:g" usr/lib/wingide${MY_PV3}/wing || die
+	sed -i -e "s:/usr/lib/${PN}${MY_PV3}:${WINGHOME}:g" usr/lib/${MY_PV3}${MY_PV3}/wing || die
 }
 
 
@@ -42,23 +42,23 @@ src_compile() {
 
 src_install() {
 	dodir ${WINGHOME}
-	cp -R ${WORKDIR}/usr/lib/wingide${MY_PV3}/* ${D}/${WINGHOME}/ || die "Install failed!"
-	dosym ${WINGHOME}/wing /usr/bin/wingide
+	cp -R ${WORKDIR}/usr/lib/${PN}${MY_PV3}/* ${D}/${WINGHOME}/ || die "Install failed!"
+	dosym ${WINGHOME}/wing /usr/bin/${PN}${MY_PV3}
 
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
-		newins "${WORKDIR}"/usr/lib/wingide${MY_PV3}/resources/wing${res}.png wingide.png
+		newins "${WORKDIR}"/usr/lib/${PN}${MY_PV3}/resources/wing${res}.png wingide.png
 	done
 
 	insinto ${WINGHOME}
-	doins "${FILESDIR}"/keymap.eclipse
+        doins "${FILESDIR}"/keymap.eclipse
 }
 
 pkg_postinst() {
 	einfo ""
-	einfo "To run Wing IDE Professional use wingide command"
+	einfo "To run Wing IDE Professional use ${PN}${MY_PV3} command"
 	einfo ""
-	einfo "To install fixes from Wing\`s developers run wingide under root"
+	einfo "To install fixes from Wing\`s developers run Wing IDE Professional under root"
 	einfo "and select in menu Help-Check for updates"
 	einfo ""
 }

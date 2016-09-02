@@ -22,7 +22,7 @@ MY_PV_WING_CONFORM_BETA=${MY_PV/beta/b}
 
 DESCRIPTION="the intelligent development environment for python programmers"
 HOMEPAGE="http://www.wingware.com"
-SRC_URI="http://wingware.com/pub/wingide/prerelease/${MY_PV_WING_CONFORM_BETA}/wingide${MY_PV_MAJOR}-${MY_PV_WING_CONFORM_BETA}.x86_64.rpm"
+SRC_URI="http://wingware.com/pub/${PN}/prerelease/${MY_PV_WING_CONFORM_BETA}/${PN}${MY_PV_MAJOR}-${MY_PV_WING_CONFORM_BETA}.x86_64.rpm"
 
 LICENSE="WingIDE"
 SLOT="0"
@@ -35,7 +35,7 @@ S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
-	sed -i -e "s:/usr/lib/wingide${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/wingide${MY_PV_MAJOR}/wing || die
+	sed -i -e "s:/usr/lib/${PN}${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/${PN}${MY_PV_MAJOR}/wing || die
 }
 
 
@@ -45,12 +45,12 @@ src_compile() {
 
 src_install() {
 	dodir ${WINGHOME}
-	cp -R ${WORKDIR}/usr/lib/wingide${MY_PV_MAJOR}/* ${D}/${WINGHOME}/ || die "Install failed!"
-	dosym ${WINGHOME}/wing /usr/bin/wingide
+	cp -R ${WORKDIR}/usr/lib/${PN}${MY_PV_MAJOR}/* ${D}/${WINGHOME}/ || die "Install failed!"
+	dosym ${WINGHOME}/wing /usr/bin/${PN}${MY_PV_MAJOR}
 
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
-		newins "${WORKDIR}"/usr/lib/wingide${MY_PV_MAJOR}/resources/wing${res}.png wingide.png
+		newins "${WORKDIR}"/usr/lib/${PN}${MY_PV_MAJOR}/resources/wing${res}.png wingide.png
 	done
 
 	insinto ${WINGHOME}
@@ -59,9 +59,9 @@ src_install() {
 
 pkg_postinst() {
 	einfo ""
-	einfo "To run Wing IDE Professional use wingide command"
+	einfo "To run Wing IDE Professional use ${PN}${MY_PV_MAJOR} command"
 	einfo ""
-	einfo "To install fixes from Wing\`s developers run wingide under root"
+	einfo "To install fixes from Wing\`s developers run Wing IDE Professional under root"
 	einfo "and select in menu Help-Check for updates"
 	einfo ""
 }
