@@ -23,7 +23,7 @@ MY_PV1=${MY_PV/beta/b}
 # prerelease version url format:
 #http://wingware.com/pub/wingide-personal/prerelease/6.0.0-b1/wingide-personal6-6.0.0-b1.x86_64.rpm
 
-DESCRIPTION="Wing IDE is advanced Python IDE."
+DESCRIPTION="the intelligent development environment for python programmers"
 HOMEPAGE="http://www.wingware.com"
 SRC_URI="http://wingware.com/pub/wingide/prerelease/${MY_PV1}/wingide${MY_PV_MAJOR}-${MY_PV1}.x86_64.rpm"
 
