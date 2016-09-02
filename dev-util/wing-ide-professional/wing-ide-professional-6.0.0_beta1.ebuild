@@ -34,9 +34,6 @@ WINGHOME="/opt/${PN}"
 S=${WORKDIR}
 
 src_unpack () {
-	einfo "${PV}"
-	einfo "${PR}"
-	einfo "${PVR}"
 	rpm_src_unpack ${A}
 	sed -i -e "s:/usr/lib/wingide${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/wingide${MY_PV_MAJOR}/wing || die
 }
