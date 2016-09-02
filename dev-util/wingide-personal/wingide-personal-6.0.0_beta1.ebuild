@@ -50,7 +50,7 @@ src_install() {
 
 	cat <<-EOF > ${PN}${MY_PV_MAJOR}.desktop
 		[Desktop Entry]
-		Version=${PV}
+		Version=${MY_PV_MAJOR}
 		Type=Application
 		Name=Wing IDE Personal ${MY_PV_MAJOR}
 		Comment=Wingware Python IDE: Python IDE for Python Developers
