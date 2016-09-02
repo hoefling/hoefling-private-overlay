@@ -35,7 +35,7 @@ S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
-	sed -i -e "s:/usr/lib/${PN}${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/${PN}${MY_PV_MAJOR}/wing || die
+	sed -i -e "s:/usr/lib/${PN}${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/${PN}${MY_PV_MAJOR}/wing-personal || die
 }
 
 
@@ -46,13 +46,13 @@ src_compile() {
 src_install() {
 	dodir ${WINGHOME}
 	cp -R ${WORKDIR}/usr/lib/${PN}${MY_PV_MAJOR}/* ${D}/${WINGHOME}/ || die "Install failed!"
-	dosym ${WINGHOME}/wing /usr/bin/${PN}${MY_PV_MAJOR}
+	dosym ${WINGHOME}/wing-personal /usr/bin/${PN}${MY_PV_MAJOR}
 
-	cat <<-EOF > wingide.desktop
+	cat <<-EOF > ${PN}${MY_PV_MAJOR}.desktop
 		[Desktop Entry]
 		Version=${PV}
 		Type=Application
-		Name=WingIDE
+		Name=Wing IDE Personal ${MY_PV_MAJOR}
 		Comment=Wingware Python IDE: Python IDE for Python Developers
 		Exec=${PN}${MY_PV_MAJOR}
 		Icon=wingide
@@ -69,7 +69,7 @@ src_install() {
 	doins "${FILESDIR}"/keymap.eclipse
 
         insinto /usr/share/applications/
-        doins wingide.desktop
+        doins ${PN}${MY_PV_MAJOR}.desktop
 }
 
 pkg_postinst() {
