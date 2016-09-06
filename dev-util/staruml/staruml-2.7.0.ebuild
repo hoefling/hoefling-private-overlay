@@ -42,7 +42,7 @@ src_install() {
 
 	for res in 16 32 48 64 128; do
 		insinto /usr/share/icons/hicolor/${res}x${res}/apps/
-		newins "${WORKDIR}"/usr/share/icons/hicolor/scalable/apps.${PN}.svg ${PN}.svg
+		newins "${WORKDIR}"/usr/share/icons/hicolor/scalable/apps/${PN}.svg ${PN}.svg
 		newins "${WORKDIR}"/opt/${PN}/appshell32.png ${PN}.png
 	done
 
