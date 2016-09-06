@@ -23,6 +23,8 @@ IUSE=""
 RDEPEND=""
 DEPEND=""
 
+S="${WORKDIR}"
+
 src_unpack() {
         # unpack deb
         unpack_deb ${A}
