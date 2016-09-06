@@ -28,7 +28,6 @@ S="${WORKDIR}"
 src_unpack() {
         # unpack deb
         unpack_deb ${A}
-        unpacker data.tar.gz
 }
 
 #src_prepare() {
