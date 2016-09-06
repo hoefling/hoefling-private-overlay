@@ -12,8 +12,8 @@ HOMEPAGE="TODO"
 #SRC_URI="http://staruml.io/download/release/v2.7.0/StarUML-v2.7.0-64-bit.deb"
 #32bit_URI="http://staruml.io/download/release/v2.7.0/StarUML-v2.7.0-32-bit.deb"
 ROOT_URI="http://staruml.io/download/release/v${PV}"
-SRC_URI="x86? ( ${ROOT_URI}/${PN}-v${PV}-64-bit.deb )
-	amd64? ( ${ROOT_URI}/${PN}-v${PV}-32-bit.deb )"
+SRC_URI="x86? ( ${ROOT_URI}/${PN}-v${PV}-32-bit.deb )
+	amd64? ( ${ROOT_URI}/${PN}-v${PV}-64-bit.deb )"
 
 LICENSE="StarUML"
 SLOT="0"
@@ -25,7 +25,7 @@ DEPEND=""
 
 src_unpack() {
         # unpack deb
-        unpacker_deb StarUML-v2.7.0-64-bit.deb
+        unpack_deb ${A}
         unpacker data.tar.gz
 }
 
