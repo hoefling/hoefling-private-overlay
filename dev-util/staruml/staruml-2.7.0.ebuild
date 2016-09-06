@@ -20,7 +20,7 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
 
-RDEPEND=""
+RDEPEND="dev-libs/libgcrypt:11"
 DEPEND=""
 
 INSTALLDIR="/opt/${PN}"
