@@ -20,7 +20,8 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
 
-RDEPEND="dev-libs/libgcrypt:11"
+RDEPEND="dev-libs/libgcrypt:11
+	gnome-base/gconf"
 DEPEND=""
 
 INSTALLDIR="/opt/${PN}"
