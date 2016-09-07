@@ -21,7 +21,8 @@ KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
 
 RDEPEND="dev-libs/libgcrypt:11
-	gnome-base/gconf"
+	gnome-base/gconf
+	|| ( ( >=sys-fs/eudev-3.1.5 sys-libs/libudev-compat ) >=sys-fs/udev-225-r1 )"
 DEPEND=""
 
 INSTALLDIR="/opt/${PN}"
