@@ -6,8 +6,8 @@ EAPI=6
 
 inherit unpacker
 
-DESCRIPTION="TODO"
-HOMEPAGE="TODO"
+DESCRIPTION="A sophisticated software modeler."
+HOMEPAGE="http://staruml.io"
 
 #SRC_URI="http://staruml.io/download/release/v2.7.0/StarUML-v2.7.0-64-bit.deb"
 #32bit_URI="http://staruml.io/download/release/v2.7.0/StarUML-v2.7.0-32-bit.deb"
