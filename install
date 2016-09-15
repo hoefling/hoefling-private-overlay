@@ -1,11 +1,68 @@
 #!/bin/bash
+
+_rc_fns="/etc/init.d/functions.sh"
+_rc_fns_fallback="/etc/init.d/functions"
+if [ -f "$_rc_fns" ]; then
+        source $_rc_fns
+elif [ -f "$_rc_fns_fallback" ]; then
+        source $_rc_fns_fallback
+else
+        einfo () {
+                printf "%s\n" "$*"
+        }
+        ebegin () {
+                printf "%s ...\n" "$*"
+        }
+        eend () {
+                _ret=$?
+                printf "\n"; return $_ret
+        }
+        export -f einfo ebegin eend
+        einfo "init.d functions not found, using custom fallback."
+fi
+
+ebegin "Reading repo conf"
 GIT_DIR=$(git rev-parse --show-toplevel)
 REPO_NAME=$(cat $GIT_DIR/profiles/repo_name)
+GIT_URL=$(git remote get-url origin | sed 's,:,/,; s,@,://,; s/\.git//')
+eend $?
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
+ebegin "Creating overlay directories"
+OVERLAY_DIR="/usr/local/portage/overlays/hoefling-private"
+REPOS_CONF="/etc/portage/repos.conf"
+CONF_FILE="$REPOS_CONF/$REPO_NAME.conf"
+
+mkdir -p $OVERLAY_DIR
+chown -R portage:portage $OVERLAY_DIR
+mkdir -p $REPOS_CONF
+eend $?
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
+ebegin "Writing repo conf"
+cat <<EOM >$CONF_FILE
+[$REPO_NAME]
+masters = gentoo
+priority = 50
+location = $OVERLAY_DIR
+sync-type = git
+sync-uri = $GIT_URL
+auto-sync = Yes
+EOM
+eend $?
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
+ebegin "Running emerge sync"
+eix-sync > /dev/null
+eend $?
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+
+einfo "Overlay installed."
 
 #cp $GIT_DIR/repositories.xml /etc/layman/overlays/$REPO_NAME.xml
 # attach local repo string because netqa server blocks portage/layman connections
 # find last source entry and attach ref to local git repo
-LINE=$(grep -n '</source>' repositories.xml | awk -F: '{print $1}')
-SRC_LOCAL="<source type=\"git\">file://$GIT_DIR</source>"
-sed -e "${LINE}s%$%\n\t\t$SRC_LOCAL%" $GIT_DIR/repositories.xml > /etc/layman/overlays/$REPO_NAME.xml
-layman -S -a $REPO_NAME
+#LINE=$(grep -n '</source>' repositories.xml | awk -F: '{print $1}')
+#SRC_LOCAL="<source type=\"git\">file://$GIT_DIR</source>"
+#sed -e "${LINE}s%$%\n\t\t$SRC_LOCAL%" $GIT_DIR/repositories.xml > /etc/layman/overlays/$REPO_NAME.xml
+#layman -S -a $REPO_NAME
