@@ -26,9 +26,11 @@ HOMEPAGE="http://cython.org https://pypi.python.org/pypi/Cython"
 if [[ ${PV} == 9999 ]]; then
 	SRC_URI=""
 	KEYWORDS=""
+	S="${WORKDIR}/${P}"
 else
 	SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~ia64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~x64-solaris ~x86-solaris"
+	S="${WORKDIR}/${MY_PN}-${PV%_*}"
 fi
 
 LICENSE="Apache-2.0"
@@ -46,7 +48,6 @@ DEPEND="${RDEPEND}
 	test? ( dev-python/numpy[${PYTHON_USEDEP}] )"
 
 SITEFILE=50cython-gentoo.el
-S="${WORKDIR}/${MY_PN}-${PV%_*}"
 
 python_compile() {
 	if ! python_is_python3; then
