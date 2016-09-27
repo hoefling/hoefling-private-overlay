@@ -25,7 +25,7 @@ HOMEPAGE="http://www.wingware.com"
 SRC_URI="http://wingware.com/pub/${PN}/prerelease/${MY_PV_WING_CONFORM_BETA}/${PN}${MY_PV_MAJOR}-${MY_PV_WING_CONFORM_BETA}.x86_64.rpm"
 
 LICENSE="WingIDE"
-SLOT="0"
+SLOT="6"
 KEYWORDS="~amd64"
 
 DEPEND=">=dev-lang/python-2.0.0"
