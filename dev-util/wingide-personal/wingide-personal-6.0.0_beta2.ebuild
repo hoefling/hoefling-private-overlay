@@ -55,7 +55,7 @@ src_install() {
 		Name=Wing IDE Personal ${MY_PV_MAJOR}
 		Comment=Wingware Python IDE: Python IDE for Python Developers
 		Exec=${PN}${MY_PV_MAJOR}
-		Icon=wingide
+		Icon=${PN}${MY_PV_MAJOR}
 		Categories=Development;
 		MimeType=application/x-python;
 	EOF
