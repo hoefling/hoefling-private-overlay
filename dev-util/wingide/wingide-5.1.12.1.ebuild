@@ -22,7 +22,7 @@ SRC_URI="
 "
 
 LICENSE="WingIDE"
-SLOT="0"
+SLOT="5"
 KEYWORDS="~x86 ~amd64"
 
 DEPEND=">=dev-lang/python-2.0.0"
