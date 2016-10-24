@@ -7,7 +7,7 @@ EAPI=5
 PYTHON_COMPAT=( python2_7 python3_{3,4,5} pypy )
 
 EGIT_REPO_URI="https://github.com/ReactiveX/RxPY.git"
-EGIT_BRANCH="master"
+EGIT_BRANCH="develop"
 
 if [[ ${PV} = 9999 ]]; then
         GIT_ECLASS="git-r3"
