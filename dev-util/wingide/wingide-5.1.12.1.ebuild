@@ -35,14 +35,13 @@ src_unpack () {
 	sed -i -e "s:/usr/lib/${PN}${MY_PV3}:${WINGHOME}:g" usr/lib/${PN}${MY_PV3}/wing || die
 }
 
-
 src_compile() {
 	echo "Nothing to compile."
 }
 
 src_install() {
 	dodir ${WINGHOME}
-	cp -R ${WORKDIR}/usr/lib/${PN}${MY_PV3}/* ${D}/${WINGHOME}/ || die "Install failed!"
+	cp -R "${WORKDIR}"/usr/lib/${PN}${MY_PV3}/* "${D}"/${WINGHOME}/ || die "Install failed!"
 	dosym ${WINGHOME}/wing /usr/bin/${PN}${MY_PV3}
 
 	for res in 16 32 48 64 128; do
@@ -51,7 +50,7 @@ src_install() {
 	done
 
 	insinto ${WINGHOME}
-        doins "${FILESDIR}"/keymap.eclipse
+	doins "${FILESDIR}"/keymap.eclipse
 
 	cat > ${PN}${MY_PV3}.desktop <<-EOF
 		[Desktop Entry]
@@ -65,8 +64,8 @@ src_install() {
 		MimeType=application/x-python;
 	EOF
 
-        insinto /usr/share/applications/
-        doins ${PN}${MY_PV3}.desktop
+	insinto /usr/share/applications/
+	doins ${PN}${MY_PV3}.desktop
 }
 
 pkg_postinst() {
