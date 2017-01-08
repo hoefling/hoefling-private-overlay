@@ -11,7 +11,7 @@ DESCRIPTION="the intelligent development environment for python programmers"
 HOMEPAGE="http://www.wingware.com"
 SRC_URI="http://wingware.com/pub/${PN}/prerelease/${MY_PV}/${PN}${MY_PV_MAJOR}-${MY_PV}.x86_64.rpm"
 
-LICENSE="WingIDE"
+LICENSE="WingIDE-EULA"
 SLOT="6"
 KEYWORDS="~amd64"
 

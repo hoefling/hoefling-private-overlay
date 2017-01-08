@@ -21,7 +21,7 @@ SRC_URI="
 	  amd64? ( http://wingware.com/pub/${PN}/${MY_PV1}/${PN}${MY_PV3}-${MY_PV}.x86_64.rpm )
 "
 
-LICENSE="WingIDE"
+LICENSE="WingIDE-EULA"
 SLOT="5"
 KEYWORDS="~x86 ~amd64"
 
