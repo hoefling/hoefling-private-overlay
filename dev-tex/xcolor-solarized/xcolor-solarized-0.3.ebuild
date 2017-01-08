@@ -4,7 +4,7 @@
 
 inherit latex-package
 
-DESCRIPTION="A LaTeX package defining the 16 colors from Ethan Schoonover's popular Solarized color palette"
+DESCRIPTION="LaTeX package defining 16 colors from Ethan Schoonover's Solarized color palette"
 HOMEPAGE="https://github.com/Jubobs/xcolor-solarized"
 # Taken from: ftp://ftp.dante.de/tex-archive/macros/latex/contrib/${PN}.tar.gz
 SRC_URI="https://github.com/Jubobs/${PN}/archive/v${PV}.zip"
