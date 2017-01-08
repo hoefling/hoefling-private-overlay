@@ -1,7 +1,6 @@
-# Copyright 1999-2007 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header:
-# mantainer: Ilya Kashirin (seclorum@seclorum.ru)
+# $Id$
 inherit eutils rpm versionator
 
 MY_PV=$(replace_version_separator 3 '-')
