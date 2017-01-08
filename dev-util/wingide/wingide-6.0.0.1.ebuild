@@ -9,11 +9,14 @@ MY_PV2=${PV%.*}
 
 DESCRIPTION="the intelligent development environment for python programmers"
 HOMEPAGE="http://www.wingware.com"
-SRC_URI="http://wingware.com/pub/${PN}/${MY_PV2}/${PN}${MY_PV_MAJOR}-${MY_PV}.x86_64.rpm"
-
+IUSE="personal"
+SRC_URI="http://wingware.com/pub/${PN}/${MY_PV2}/${PN}${MY_PV_MAJOR}-${MY_PV}.x86_64.rpm
+	personal? ( http://wingware.com/pub/${PN}-personal/${MY_PV2}/${PN}-personal${MY_PV_MAJOR}-${MY_PV}.x86_64.rpm )
+"
 LICENSE="WingIDE-EULA"
 SLOT="6"
 KEYWORDS="~amd64"
+ABI_X86=64
 
 RDEPEND=""
 DEPEND="${RDEPEND} >=dev-lang/python-2.0.0"
