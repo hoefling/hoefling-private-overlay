@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>oleg.hoefling@gmail.com</email>
+		<name>Oleg Höfling</name>
+	</maintainer>
+	<longdescription>Wingware Python IDE - The Intelligent Development Environment for Python Programmers.</longdescription>
+</pkgmetadata>
