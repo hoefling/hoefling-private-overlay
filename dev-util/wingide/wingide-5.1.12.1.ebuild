@@ -25,7 +25,8 @@ LICENSE="WingIDE-EULA"
 SLOT="5"
 KEYWORDS="~x86 ~amd64"
 
-DEPEND=">=dev-lang/python-2.0.0"
+RDEPEND=""
+DEPEND="${RDEPEND} >=dev-lang/python-2.0.0"
 
 WINGHOME="/opt/${PN}${MY_PV3}"
 S=${WORKDIR}
