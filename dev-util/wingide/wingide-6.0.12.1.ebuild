@@ -1,10 +1,12 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit eutils rpm versionator
+EAPI='7'
 
-MY_PV=$(replace_version_separator 3 '-')
-MY_PV_MAJOR=$(get_major_version)
+inherit eutils rpm
+
+MY_PV=$(ver_rs 3 -)
+MY_PV_MAJOR=$(ver_cut 1)
 MY_PV2=${PV%.*}
 
 DESCRIPTION="the intelligent development environment for python programmers"
@@ -25,6 +27,9 @@ S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
+}
+
+src_prepare () {
 	sed -i -e "s:/usr/lib/${PN}${MY_PV_MAJOR}:${WINGHOME}:g" usr/lib/${PN}${MY_PV_MAJOR}/wing || die
 }
 

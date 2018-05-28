@@ -1,17 +1,14 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-inherit eutils rpm versionator
+EAPI='7'
 
-MY_PV=$(replace_version_separator 3 '-')
-MY_PV1=${PV%.*}
-MY_PV2=${PV%.*.*}
-MY_PV3=${PV%.*.*.*}
+inherit eutils rpm
 
-# * 5.1.10-1
-# * 5.1.10
-# * 5.1
-# * 5
+MY_PV=$(ver_rs 3 -)    # 5.1.12-1
+MY_PV1=$(ver_cut 0-3)  # 5.1.12
+MY_PV2=$(ver_cut 0-2)  # 5.1
+MY_PV3=$(ver_cut 0-1)  # 5
 
 DESCRIPTION="Wing IDE is advanced Python IDE."
 HOMEPAGE="http://www.wingware.com"
@@ -32,6 +29,9 @@ S=${WORKDIR}
 
 src_unpack () {
 	rpm_src_unpack ${A}
+}
+
+src_prepare () {
 	sed -i -e "s:/usr/lib/${PN}${MY_PV3}:${WINGHOME}:g" usr/lib/${PN}${MY_PV3}/wing || die
 }
 
