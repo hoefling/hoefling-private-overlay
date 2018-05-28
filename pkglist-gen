@@ -50,6 +50,7 @@ def main():
             [''],
             tail,
         )))
+        file.write(os.linesep)
         file.truncate()
     return 0
 
