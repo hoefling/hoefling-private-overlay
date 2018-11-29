@@ -19,7 +19,7 @@ SRC_URI="
 
 LICENSE="WingIDE-EULA"
 SLOT="5"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 
 RDEPEND=""
 DEPEND="${RDEPEND} >=dev-lang/python-2.0.0"
