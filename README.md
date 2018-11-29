@@ -34,10 +34,10 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 # Packages
 ``app-portage/gs-pypi``
 ``dev-python/cython``
+``dev-python/pipenv``
 ``dev-python/yolk3k``
 ``dev-tex/gitdags``
 ``dev-tex/xcolor-solarized``
-``dev-util/idea-ultimate``
 ``dev-util/wingide``
 
 # Repoman status
