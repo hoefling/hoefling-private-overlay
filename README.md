@@ -3,7 +3,14 @@ Custom overlay to reuse on different machines
 
 # Installation
 
-Create new settings file for the overlay in ``/etc/portage/repos.conf/`` dir:
+This method assumes usage of the new [portage sync capabilities](https://wiki.gentoo.org/wiki/Project:Portage/Sync). Issue:
+
+```sh
+$ sudo wget -P /etc/portage/repos.conf/
+https://raw.githubusercontent.com/hoefling/hoefling-private-overlay/master/hoefling-private-overlay.conf
+```
+
+or create the settings file manually:
 
 ```sh
 
