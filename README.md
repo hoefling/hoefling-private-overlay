@@ -39,6 +39,7 @@ EOM
 Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/repos.conf) for more details.
 
 # Packages
+``dev-lang/python``
 ``dev-python/cython``
 ``dev-python/pipenv``
 ``dev-python/yolk3k``
