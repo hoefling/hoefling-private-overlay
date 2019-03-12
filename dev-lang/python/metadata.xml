@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>oleg.hoefling@gmail.com</email>
+		<name>Oleg Höfling</name>
+	</maintainer>
+	<use>
+		<flag name="bluetooth">Build Bluetooth protocol support in socket module</flag>
+		<flag name="wininst">Install Windows executables required to create an executable installer for MS Windows.</flag>
+	</use>
+</pkgmetadata>
