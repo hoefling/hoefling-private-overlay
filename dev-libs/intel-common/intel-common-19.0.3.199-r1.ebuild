@@ -48,7 +48,7 @@ pkg_setup() {
 		INTEL_DIST_AMD64_RPMS+=( "mpi-rt-${MY_PV4}-${MY_PV4}.x86_64.rpm" )
 
 		if use doc; then
-			INTEL_DIST_DAT_RPMS+=( "mpi-doc-${MY_PV3}-${MY_PV4}-${MY_PV4}.x86_64.rpm" )
+			INTEL_DIST_DAT_RPMS+=( "mpi-doc-${MY_PV3}-${MY_PV4}.x86_64.rpm" )
 		fi
 	fi
 
