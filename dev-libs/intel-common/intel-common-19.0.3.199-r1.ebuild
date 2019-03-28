@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -17,7 +17,7 @@ KEYWORDS="-* ~amd64 ~x86 ~amd64-linux ~x86-linux"
 SLOT="0"
 
 MY_PV=$(ver_rs 3 '-')  # 19.0.3-199
-MY_PV2=$(ver_cut 2)  # 19.0
+MY_PV2=$(ver_cut 1-2)  # 19.0
 MY_PV3='20'$(ver_cut 1)  # 2019
 MY_PV4="${MY_PV3}."$(ver_cut 3)'-'$(ver_cut 4)  # 2019.3-199
 

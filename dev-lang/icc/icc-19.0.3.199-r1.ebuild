@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -20,7 +20,7 @@ RDEPEND="~dev-libs/intel-common-${PV}[compiler]"
 SLOT="0"
 
 MY_PV=$(ver_rs 3 '-')  # 19.0.3-199
-MY_PV2=$(ver_cut 2)  # 19.0
+MY_PV2=$(ver_cut 1-2)  # 19.0
 
 CHECKREQS_DISK_BUILD=500M
 
