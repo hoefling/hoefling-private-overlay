@@ -8,7 +8,7 @@ inherit autotools flag-o-matic pax-utils python-utils-r1 toolchain-funcs
 
 MY_P="Python-${PV/_alpha/a}"
 MY_P2="${PV/_alpha*/}"
-PATCHSET_VERSION="3.7.2"
+PATCHSET_VERSION="3.7.3-0"
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
