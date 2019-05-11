@@ -25,7 +25,6 @@ MY_PV3=${MY_PV}.$(ver_cut 3-4)  # 2019.3.199
 
 INTEL_DIST_DAT_RPMS=(
 	"mkl-cluster-c-${MY_PV2}-${MY_PV2}.noarch.rpm"
-	"mkl-cluster-common-${MY_PV2}-${MY_PV2}.noarch.rpm"
 	"mkl-cluster-f-${MY_PV2}-${MY_PV2}.noarch.rpm"
 	"mkl-common-${MY_PV2}-${MY_PV2}.noarch.rpm"
 	"mkl-common-c-${MY_PV2}-${MY_PV2}.noarch.rpm"
@@ -49,7 +48,6 @@ INTEL_DIST_AMD64_RPMS=(
 	"mkl-gnu-rt-${MY_PV2}-${MY_PV2}.x86_64.rpm"
 	"mkl-pgi-${MY_PV2}-${MY_PV2}.x86_64.rpm"
 	"mkl-pgi-c-${MY_PV2}-${MY_PV2}.x86_64.rpm"
-	"mkl-pgi-f-${MY_PV2}-${MY_PV2}.x86_64.rpm"
 	"mkl-pgi-rt-${MY_PV2}-${MY_PV2}.x86_64.rpm"
 	"mkl-tbb-${MY_PV2}-${MY_PV2}.x86_64.rpm"
 	"mkl-tbb-rt-${MY_PV2}-${MY_PV2}.x86_64.rpm")
