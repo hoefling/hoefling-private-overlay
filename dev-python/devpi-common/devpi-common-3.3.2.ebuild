@@ -18,7 +18,9 @@ LICENSE="MIT"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux"
 IUSE="test"
 
-RDEPEND=""
+RDEPEND="
+	dev-python/py[${PYTHON_USEDEP}]
+	dev-python/requests[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
