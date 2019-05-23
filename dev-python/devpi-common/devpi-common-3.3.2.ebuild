@@ -15,7 +15,7 @@ SRC_URI="
 
 SLOT="0"
 LICENSE="MIT"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64"
 IUSE="test"
 
 RDEPEND="
@@ -25,7 +25,7 @@ DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
-		dev-python/pytest-flake8[${PYTHON_USEDEP}]
+		dev-python/pytest-flakes[${PYTHON_USEDEP}]
 	)"
 
 python_test() {
