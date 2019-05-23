@@ -22,10 +22,13 @@ RDEPEND="dev-python/devpi-common[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
+		>=dev-python/pytest-3.0[${PYTHON_USEDEP}]
 		dev-python/pytest-flake8[${PYTHON_USEDEP}]
+		dev-python/webtest[${PYTHON_USEDEP}]
+		dev-python/mock[${PYTHON_USEDEP}]
+		dev-python/pytest-timeout[${PYTHON_USEDEP}]
 	)"
 
 python_test() {
-	 ${EPYTHON} -m pytest -vv || die
+	 ${EPYTHON} -m pytest -vv --slow || die
 }
