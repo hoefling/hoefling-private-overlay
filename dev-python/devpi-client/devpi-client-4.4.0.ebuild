@@ -23,9 +23,6 @@ DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
 
-# not implemented in this version, git already has it
-RESTRICT=test
-
 python_test() {
 	pytest -vv
 }
