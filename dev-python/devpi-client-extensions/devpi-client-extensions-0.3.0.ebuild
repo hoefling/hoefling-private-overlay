@@ -16,12 +16,17 @@ SRC_URI="
 SLOT="0"
 LICENSE="MIT"
 KEYWORDS="~amd64"
-IUSE="test"
+IUSE="keyring test"
 
-RDEPEND="dev-python/devpi-client[${PYTHON_USEDEP}]"
+RDEPEND="dev-python/devpi-client[${PYTHON_USEDEP}]
+	keyring? ( dev-python/keyring[${PYTHON_USEDEP}] )
+"
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
-	test? ( dev-python/pytest[${PYTHON_USEDEP}] )"
+	test? (
+		dev-python/pytest[${PYTHON_USEDEP}]
+		dev-python/toml[${PYTHON_USEDEP}]
+	)"
 
 python_test() {
 	 ${EPYTHON} -m pytest -vv || die

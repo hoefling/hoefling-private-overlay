@@ -9,4 +9,7 @@
     <remote-id type="pypi">devpi-client-extensions</remote-id>
     <remote-id type="github">hoefling/devpi-client-extensions</remote-id>
   </upstream>
+  <use>
+    <flag name="keyring">Enable support for keyrings via python-keyring.</flag>
+  </use>
 </pkgmetadata>
