@@ -29,5 +29,5 @@ DEPEND="${RDEPEND}
 	)"
 
 python_test() {
-	pytest -vv
+	${EPYTHON} -m pytest -vv || die
 }
