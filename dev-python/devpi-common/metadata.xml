@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>oleg.hoefling@gmail.com</email>
+    <name>Oleg Hoefling</name>
+  </maintainer>
+  <upstream>
+    <remote-id type="pypi">devpi-common</remote-id>
+    <remote-id type="github">devpi/devpi</remote-id>
+  </upstream>
+</pkgmetadata>
