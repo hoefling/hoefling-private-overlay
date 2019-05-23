@@ -25,6 +25,7 @@ DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	test? (
 		dev-python/pytest[${PYTHON_USEDEP}]
+		dev-python/pytest-mock[${PYTHON_USEDEP}]
 		dev-python/readme_renderer[${PYTHON_USEDEP}]
 		dev-python/toml[${PYTHON_USEDEP}]
 	)"
