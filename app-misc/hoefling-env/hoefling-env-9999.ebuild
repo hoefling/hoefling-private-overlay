@@ -3,36 +3,69 @@
 
 EAPI=7
 
-inherit git-r3
-
-EGIT_REPO_URI="https://github.com/hoefling/gentoo-postinstall"
+EGIT_REPO_URI="https://github.com/hoefling/gentoo-postinstall.git"
 EGIT_BRANCH="master"
+
+if [[ ${PV} = 9999* ]]; then
+	GIT_ECLASS="git-r3"
+	EXPERIMENTAL="true"
+fi
+
+inherit ${GIT_ECLASS} systemd
 
 DESCRIPTION="My private stuff"
 HOMEPAGE="https://github.com/hoefling/gentoo-postinstall"
 
+if [[ ${PV} == 9999* ]]; then
+	SRC_URI=""
+	KEYWORDS=""
+	S="${WORKDIR}/${P}"
+else
+	# versioning not supported
+	SRC_URI=""
+	KEYWORDS=""
+	S="${WORKDIR}/${P}"
+fi
+
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+test"
+IUSE="+systemd +test"
 
-RDEPEND=""
+RDEPEND="
+	systemd? ( sys-apps/systemd:= )"
 DEPEND="
 	test? (
 		${RDEPEND}
 		dev-util/bats
 	)"
+BDEPEND=""
 
 src_unpack() {
-	git-r3_fetch
-	git-r3_checkout
+	default
+	[[ ${PV} = 9999* ]] && git-r3_src_unpack
 }
 
 src_test() {
-	bats tests/ || die
+	bats "${S}/tests/" || die "Tests failed - there might be something wrong with the system configuration"
 }
 
 src_install() {
-	mkdir -p "${ED}/etc/portage"
-	cp "${WORKDIR}/${P}/portage-bashrc" "${ED}/etc/portage/bashrc" || die
+	default
+	insinto /etc/portage
+	newins "${S}/portage-bashrc" bashrc
+	if use systemd; then
+		systemd_dounit "${S}"/systemd/*.*
+		systemd_enable_service default.target mlocate-updatedb.timer
+		#systemd_enable var-tmp-portage.mount
+	fi
+}
+
+pkg_postinst() {
+	elog "To enable mlocate database updates, you will need "
+	elog "to enable the mlocate-updatedb timer:"
+	elog "    systemctl enable --now mlocate-updatedb.timer"
+	elog
+	elog "To mount /var/tmp/portage to tmpfs:"
+	elog "    systemctl enable --now var-tmp-portage.mount"
 }
