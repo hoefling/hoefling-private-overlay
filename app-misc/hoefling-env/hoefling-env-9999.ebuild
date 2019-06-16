@@ -54,11 +54,7 @@ src_install() {
 	default
 	insinto /etc/portage
 	newins "${S}/portage-bashrc" bashrc
-	if use systemd; then
-		systemd_dounit "${S}"/systemd/*.*
-		systemd_enable_service default.target mlocate-updatedb.timer
-		#systemd_enable var-tmp-portage.mount
-	fi
+	use systemd && systemd_dounit "${S}"/systemd/*.*
 }
 
 pkg_postinst() {
