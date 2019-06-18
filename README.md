@@ -1,7 +1,9 @@
 # hoefling-private-overlay
 Custom overlay to reuse on different machines
 
-# Installation via ``eselect-repository``
+## Installation
+
+### Installation via ``eselect-repository``
 
 This method uses the ``eselect`` module ``eselect-repository``. Issue:
 
@@ -11,7 +13,7 @@ $ sudo eselect repository add hoefling-private git https://github.com/hoefling/h
 
 Refer to [``eselect-repository`` module page in Gentoo Wiki](https://wiki.gentoo.org/wiki/Eselect/Repository) for more details.
 
-# Installation via `repos.conf`
+### Installation via `repos.conf`
 
 This method assumes usage of the new [portage sync capabilities](https://wiki.gentoo.org/wiki/Project:Portage/Sync). Issue:
 
@@ -48,14 +50,21 @@ EOM
 
 Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/repos.conf) for more details.
 
-# Packages
-``dev-lang/python``
+## Packages
+``app-misc/hoefling-env``
+``dev-lang/icc``
+``dev-lang/ifc``
+``dev-libs/intel-common``
 ``dev-python/cython``
+``dev-python/devpi-client``
+``dev-python/devpi-client-extensions``
+``dev-python/devpi-common``
 ``dev-python/pipenv``
 ``dev-python/yolk3k``
 ``dev-tex/gitdags``
 ``dev-tex/xcolor-solarized``
 ``dev-util/wingide``
+``sci-libs/mkl``
 
-# Repoman status
+## Repoman status
 [![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefling-private-overlay)

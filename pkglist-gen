@@ -1,37 +1,19 @@
 #!/usr/bin/env python
 
-#_packages=$(find . -mindepth 2 -maxdepth 2 -type d -not -path "*/.git*" \
-#        -not -path "./licenses" -not -path "./metadata" -not -path "./profiles" \
-#        | sort | sed 's,./,``,; s/$/``\\n/')
-#sed -n '/# Packages/{p;:a;N;/# Repoman/!ba;s/.*\n/'"$_packages"'\n/};p' README.md
-
-'''
+"""
 Scans the overlay dir and writes found packages to project README.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import itertools
 import os
 import sys
-
-
-def packages(where):
-    '''Lists all packages in overlay dir.'''
-    _, categories, _ = next(iter(os.walk(where)))
-    categories = [
-        dir for dir in categories
-        if dir not in ('.git', 'licenses', 'metadata', 'profiles')
-    ]
-    return sorted(
-        os.path.join(category, pkg)
-        for category in categories
-        for pkg in next(iter(os.walk(os.path.join(where, category))))[1]
-    )
+import portage
 
 
 def main():
-    '''script entry point'''
+    """script entry point"""
     here = os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir))
     readme = os.path.join(here, 'README.md')
 
@@ -39,20 +21,25 @@ def main():
         print('Error: README.md is not found in {}'.format(here))
         return 1
 
+    api = portage.db[portage.root]['porttree'].dbapi
+    packages = api.cp_all(trees=(here,))
+
     with open(readme, 'r+') as file:
         contents = [line.strip() for line in file.readlines()]
-        head = contents[0:contents.index('# Packages') + 1]
-        tail = contents[contents.index('# Repoman status'):]
+        head = contents[0 : contents.index('## Packages') + 1]
+        tail = contents[contents.index('## Repoman status') :]
         file.seek(0)
-        file.write(os.linesep.join(itertools.chain(
-            head,
-            ('``{}``'.format(pkg) for pkg in packages(here)),
-            [''],
-            tail,
-        )))
+        file.write(
+            os.linesep.join(
+                itertools.chain(
+                    head, ('``{}``'.format(pkg) for pkg in packages), [''], tail
+                )
+            )
+        )
         file.write(os.linesep)
         file.truncate()
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())
