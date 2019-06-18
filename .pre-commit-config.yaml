@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: readme-package-list-generator
+        name: Persist list of packages in README
+        description: Rescan the overlay directory and update the packages list in README.md
+        entry: python readme-package-list-generator
+        language: system
+        verbose: true
