@@ -54,6 +54,7 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ``app-misc/hoefling-env``
 ``dev-lang/icc``
 ``dev-lang/ifc``
+``dev-lang/python``
 ``dev-libs/intel-common``
 ``dev-python/cython``
 ``dev-python/devpi-client``
@@ -67,4 +68,4 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ``sci-libs/mkl``
 
 ## Repoman status
-[![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefling-private-overlay)
+[![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefli
