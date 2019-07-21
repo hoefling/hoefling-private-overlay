@@ -15,14 +15,13 @@ inherit ${GIT_ECLASS} systemd
 
 DESCRIPTION="My private stuff"
 HOMEPAGE="https://github.com/hoefling/gentoo-postinstall"
+SRC_URI="https://github.com/hoefling/python3/archive/gentoo-dell-xps13-9370.tar.gz"
 
 if [[ ${PV} == 9999* ]]; then
-	SRC_URI=""
 	KEYWORDS=""
 	S="${WORKDIR}/${P}"
 else
-	# versioning not supported
-	SRC_URI=""
+	# versioning not supported (yet?)
 	KEYWORDS=""
 	S="${WORKDIR}/${P}"
 fi
@@ -55,6 +54,19 @@ src_install() {
 	insinto /etc/portage
 	newins "${S}/portage-bashrc" bashrc
 	use systemd && systemd_dounit "${S}"/systemd/*.*
+	PY3_PATCHES=(
+		"0001-clear-linux-0001-Fix-python-path-for-linux.patch"
+		"0002-clear-linux-0002-Skip-tests-TODO-fix-skips.patch"
+		"0003-clear-linux-0003-Use-pybench-to-optimize-python.patch"
+		"0004-clear-linux-0004-Add-avx2-and-avx512-support.patch"
+		"0005-clear-linux-0005-Build-avx2-and-avx512-versions-of-the-math-library.patch"
+		"0006-clear-linux-0001-Add-pybench-for-pgo-optimization.patch"
+		"0007-clear-linux-0001-pythonrun.c-telemetry-patch.patch"
+	)
+	insinto "/etc/portage/patches/dev-lang/python:3.7"
+	for _patch in "${PY3_PATCHES[@]}"; do
+		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370/${_patch##*clear-linux-}" $_patch
+	done
 }
 
 pkg_postinst() {
