@@ -51,6 +51,7 @@ EOM
 Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/repos.conf) for more details.
 
 ## Packages
+``app-admin/eselect``
 ``app-misc/hoefling-env``
 ``dev-lang/icc``
 ``dev-lang/ifc``
