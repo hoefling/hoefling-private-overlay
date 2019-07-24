@@ -57,7 +57,20 @@ src_install() {
 	newins "${S}/portage-bashrc" bashrc
 	use systemd && systemd_dounit "${S}"/systemd/*.*
 
-	PY3_PATCHES=(
+	PY36_PATCHES=(
+		"0001-clearlinux-0001-Fix-python-path-for-linux.patch"
+		"0002-clearlinux-0002-Skip-tests-TODO-fix-skips.patch"
+		"0003-clearlinux-0003-Use-pybench-to-optimize-python.patch"
+		"0004-clearlinux-0004-Add-avx2-and-avx512-support.patch"
+		"0005-clearlinux-0005-Build-avx2-and-avx512-versions-of-the-math-library.patch"
+		"0007-clearlinux-0001-pythonrun.c-telemetry-patch.patch"
+	)
+	insinto "/etc/portage/patches/dev-lang/python:3.6"
+	for _patch in "${PY36_PATCHES[@]}"; do
+		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370/${_patch##*clearlinux-}" $_patch
+	done
+
+	PY37_PATCHES=(
 		"0001-clearlinux-0001-Fix-python-path-for-linux.patch"
 		"0002-clearlinux-0002-Skip-tests-TODO-fix-skips.patch"
 		"0003-clearlinux-0003-Use-pybench-to-optimize-python.patch"
@@ -67,7 +80,7 @@ src_install() {
 		"0007-clearlinux-0001-pythonrun.c-telemetry-patch.patch"
 	)
 	insinto "/etc/portage/patches/dev-lang/python:3.7"
-	for _patch in "${PY3_PATCHES[@]}"; do
+	for _patch in "${PY37_PATCHES[@]}"; do
 		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370/${_patch##*clearlinux-}" $_patch
 	done
 
