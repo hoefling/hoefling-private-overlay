@@ -16,7 +16,8 @@ inherit ${GIT_ECLASS} systemd
 DESCRIPTION="My private stuff"
 HOMEPAGE="https://github.com/hoefling/gentoo-postinstall"
 SRC_URI="
-	https://github.com/hoefling/python3/archive/gentoo-dell-xps13-9370.tar.gz -> clearlinux-python3-gentoo.tar.gz
+	https://github.com/hoefling/python3/archive/gentoo-dell-xps13-9370-python36.tar.gz -> clearlinux-python36-gentoo.tar.gz
+	https://github.com/hoefling/python3/archive/gentoo-dell-xps13-9370-python37.tar.gz -> clearlinux-python37-gentoo.tar.gz
 	https://github.com/clearlinux-pkgs/numpy/archive/master.tar.gz -> clearlinux-numpy-master.tar.gz"
 
 if [[ ${PV} == 9999* ]]; then
@@ -67,7 +68,7 @@ src_install() {
 	)
 	insinto "/etc/portage/patches/dev-lang/python:3.6"
 	for _patch in "${PY36_PATCHES[@]}"; do
-		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370/${_patch##*clearlinux-}" $_patch
+		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370-python36/${_patch##*clearlinux-}" $_patch
 	done
 
 	PY37_PATCHES=(
@@ -81,7 +82,7 @@ src_install() {
 	)
 	insinto "/etc/portage/patches/dev-lang/python:3.7"
 	for _patch in "${PY37_PATCHES[@]}"; do
-		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370/${_patch##*clearlinux-}" $_patch
+		newins "${WORKDIR}/python3-gentoo-dell-xps13-9370-python37/${_patch##*clearlinux-}" $_patch
 	done
 
 	NUMPY_PATCHES=(
