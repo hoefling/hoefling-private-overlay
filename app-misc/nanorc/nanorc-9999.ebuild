@@ -22,6 +22,11 @@ IUSE=""
 RDEPEND="app-editors/nano"
 DEPEND="${RDEPEND}"
 
+if [[ ${PV} == 9999* ]]; then
+	KEYWORDS=""
+	S="${WORKDIR}/${P}"
+fi
+
 src_unpack() {
 	default
 	[[ ${PV} = 9999* ]] && git-r3_src_unpack
@@ -30,5 +35,5 @@ src_unpack() {
 src_install() {
 	default
 	insinto /usr/local/share/nano
-	doins "${S}/*.nanorc"
+	doins ${S}/*.nanorc
 }
