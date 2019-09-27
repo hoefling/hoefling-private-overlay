@@ -53,6 +53,7 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ## Packages
 ``app-admin/eselect``
 ``app-misc/hoefling-env``
+``app-misc/nanorc``
 ``dev-lang/python``
 ``dev-python/cython``
 ``dev-python/devpi-client``
