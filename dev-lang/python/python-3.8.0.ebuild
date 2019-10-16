@@ -6,7 +6,7 @@ WANT_LIBTOOL="none"
 
 inherit autotools flag-o-matic pax-utils python-utils-r1 toolchain-funcs
 
-MY_P="Python-$(ver_cut 1-3)b$(ver_cut 5)"
+MY_P="Python-${PV}"
 PATCHSET_VERSION="3.8.0b2"
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
@@ -16,7 +16,7 @@ SRC_URI="https://www.python.org/ftp/python/$(ver_cut 1-3)/${MY_P}.tar.xz
 
 LICENSE="PSF-2"
 SLOT="$(ver_cut 1-2)/$(ver_cut 1-2)m"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sh ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sh ~sparc ~x86"
 IUSE="bluetooth build examples gdbm hardened ipv6 libressl +ncurses +readline sqlite +ssl test tk wininst +xml"
 RESTRICT="!test? ( test )"
 
