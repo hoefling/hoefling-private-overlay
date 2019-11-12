@@ -54,7 +54,6 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ``app-admin/eselect``
 ``app-misc/hoefling-env``
 ``app-misc/nanorc``
-``dev-lang/python``
 ``dev-python/cython``
 ``dev-python/devpi-client``
 ``dev-python/devpi-client-extensions``
