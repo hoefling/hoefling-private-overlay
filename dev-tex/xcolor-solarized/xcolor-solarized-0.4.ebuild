@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI='6'
+EAPI='7'
 
 inherit latex-package
 
@@ -15,17 +15,8 @@ KEYWORDS="~amd64 ~x86"
 S=${WORKDIR}/${P}
 IUSE=""
 DEPEND="dev-texlive/texlive-latexextra"
-RDEPEND="dev-texlive/texlive-latex
-	dev-tex/xcolor"
+RDEPEND="dev-texlive/texlive-latexrecommended"
 
 src_compile() {
 	latex ${PN}.ins || die
 }
-
-#TEXMF_DIST="/usr/share/texmf-dist"
-#src_install(){
-#	latex-package_src_doinstall styles
-#	insinto ${TEXMF}/tex/latex/${PN}/
-#	doins ${PN}.sty
-#	insinto ${TEXMF_DIST}
-#}
