@@ -1,6 +1,9 @@
 # hoefling-private-overlay
 Custom overlay to reuse on different machines
 
+## Repoman status
+[![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefling-private-overlay)
+
 ## Installation
 
 ### Installation via ``eselect-repository``
@@ -62,6 +65,3 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ``dev-tex/xcolor-solarized``
 ``dev-util/wingide``
 ``dev-vcs/mercurial``
-
-## Repoman status
-[![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefling-private-overlay)
