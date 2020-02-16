@@ -64,4 +64,3 @@ Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/
 ``dev-tex/gitdags``
 ``dev-tex/xcolor-solarized``
 ``dev-util/wingide``
-``dev-vcs/mercurial``
