@@ -29,7 +29,7 @@ RDEPEND="${DEPEND}"
 src_compile() {
 	export GOOS=$(go-env_goos)
 	export CGO_ENABLED=0
-	GOFLAGS+=' -ldflags="-s -w"'
+	GOFLAGS+=" -ldflags='-s -w'"
 	ego build ${GOFLAGS}
 }
 
