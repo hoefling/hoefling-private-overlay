@@ -1,11 +1,8 @@
 #!/bin/bash
 
-_rc_fns="/etc/init.d/functions.sh"
-_rc_fns_fallback="/etc/init.d/functions"
+_rc_fns="/usr/lib/gentoo/functions.sh"
 if [ -f "$_rc_fns" ]; then
         source $_rc_fns
-elif [ -f "$_rc_fns_fallback" ]; then
-        source $_rc_fns_fallback
 else
         einfo () {
                 printf "%s\n" "$*"
@@ -29,7 +26,7 @@ eend $?
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
 ebegin "Creating overlay directories"
-OVERLAY_DIR="/usr/local/portage/overlays/hoefling-private"
+OVERLAY_DIR="/var/db/repos/hoefling-private"
 REPOS_CONF="/etc/portage/repos.conf"
 CONF_FILE="$REPOS_CONF/$REPO_NAME.conf"
 

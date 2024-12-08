@@ -5,5 +5,7 @@
 		<email>oleg.hoefling@gmail.com</email>
 		<name>Oleg Höfling</name>
 	</maintainer>
-	<longdescription>A LaTeX package defining the 16 colors from Ethan Schoonover's popular Solarized color palette.</longdescription>
+	<upstream>
+		<remote-id type="github">Jubobs/xcolor-solarized</remote-id>
+	</upstream>
 </pkgmetadata>

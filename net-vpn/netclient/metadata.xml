@@ -5,5 +5,7 @@
 		<email>oleg.hoefling@gmail.com</email>
 		<name>Oleg Höfling</name>
 	</maintainer>
-	<longdescription>Automated WireGuard® Management Client</longdescription>
+	<upstream>
+		<remote-id type="github">gravitl/netclient</remote-id>
+	</upstream>
 </pkgmetadata>

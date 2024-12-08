@@ -1,8 +1,7 @@
 # hoefling-private-overlay
 Custom overlay to reuse on different machines
 
-## Repoman status
-[![Build Status](https://travis-ci.org/hoefling/hoefling-private-overlay.svg?branch=master)](https://travis-ci.org/hoefling/hoefling-private-overlay)
+[![pkgcheck](https://github.com/hoefling/hoefling-private-overlay/actions/workflows/pkgcheck.yml/badge.svg)](https://github.com/hoefling/hoefling-private-overlay/actions/workflows/pkgcheck.yml)
 
 ## Installation
 
@@ -52,15 +51,3 @@ EOM
 ```
 
 Refer to [``repos.conf`` page in Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/repos.conf) for more details.
-
-## Packages
-``app-admin/eselect``
-``app-misc/hoefling-env``
-``app-misc/nanorc``
-``dev-python/cython``
-``dev-python/devpi-client``
-``dev-python/devpi-client-extensions``
-``dev-python/devpi-common``
-``dev-tex/gitdags``
-``dev-tex/xcolor-solarized``
-``dev-util/wingide``
