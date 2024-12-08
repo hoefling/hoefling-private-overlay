@@ -1,0 +1,11 @@
+DEFINED_PHASES=unpack
+DESCRIPTION=GravityMark GPU Benchmark
+EAPI=8
+HOMEPAGE=https://gravitymark.tellusim.com
+INHERIT=unpacker
+KEYWORDS=-* ~amd64
+LICENSE=NVIDIA-CUDA
+SLOT=0
+SRC_URI=https://tellusim.com/download/GravityMark_1.88.run
+_eclasses_=multiprocessing	1e32df7deee68372153dca65f4a7c21f	toolchain-funcs	d3d42b22a610ce81c267b644bcec9b87	multilib	b2a329026f2e404e9e371097dda47f96	unpacker	fb4b84181244b3b9990fa0bf40232dd2
+_md5_=1a3d605e637dbc6c096b18522a490b0d

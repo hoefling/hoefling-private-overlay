@@ -1,6 +1,6 @@
 EAPI=8
 
-inherit go-module systemd
+inherit go-module go-env systemd
 
 DESCRIPTION="Automated WireGuard® Management Client"
 HOMEPAGE="https://netmaker.io"
@@ -17,7 +17,6 @@ fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm ~arm64"
 IUSE="systemd"
 DEPEND="net-vpn/wireguard-tools
 	net-firewall/iptables
@@ -36,7 +35,7 @@ src_compile() {
 src_install() {
 	dosbin ${PN}
 	if use systemd; then
-		systemd_newunit ${S}/build/${PN}.service ${PN}.service
+		systemd_newunit "${S}/build/${PN}.service" "${PN}.service"
 	fi
 	dodoc README.md
 	default

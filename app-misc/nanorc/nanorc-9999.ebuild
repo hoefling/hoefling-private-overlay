@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/scopatz/nanorc.git"
@@ -17,7 +17,6 @@ HOMEPAGE="https://github.com/scopatz/nanorc"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE=""
 
 RDEPEND="app-editors/nano"
 DEPEND="${RDEPEND}"

@@ -5,5 +5,7 @@
 		<email>oleg.hoefling@gmail.com</email>
 		<name>Oleg Höfling</name>
 	</maintainer>
-	<longdescription>A package for drawing educational Git history graphs.</longdescription>
+	<upstream>
+		<remote-id type="github">Jubobs/gitdags</remote-id>
+	</upstream>
 </pkgmetadata>
