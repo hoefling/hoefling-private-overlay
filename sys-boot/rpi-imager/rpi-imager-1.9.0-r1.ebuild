@@ -13,6 +13,8 @@ https://github.com/raspberrypi/rpi-imager
 SRC_URI="https://github.com/raspberrypi/rpi-imager/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${P}/src"
 
+PATCHES=( "${FILESDIR}"/${P}-unbundle-dependencies.patch )
+
 LICENSE="Apache-2.0"
 SLOT="0"
 
@@ -25,6 +27,8 @@ RDEPEND="
 	net-misc/curl
 	sys-apps/util-linux
 	sys-libs/zlib
+	app-arch/lzma
+	app-arch/zstd
 	gnutls? ( net-libs/gnutls:= )
 	!gnutls? ( dev-libs/openssl:= )
 	qt6? (
@@ -45,6 +49,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
+	net-misc/curl
 	qt6? ( dev-qt/qttools:6[linguist] )
 	!qt6? ( dev-qt/linguist-tools:5 )
 "
