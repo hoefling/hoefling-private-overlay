@@ -23,7 +23,7 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_compile() {
-	ego build ./cmd/helmwave
+	GOOS=linux ego build -ldflags="-s -w" ./cmd/helmwave
 }
 
 src_install() {
