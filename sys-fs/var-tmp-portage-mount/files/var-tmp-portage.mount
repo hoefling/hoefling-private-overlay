@@ -1,0 +1,15 @@
+#  SPDX-License-Identifier: LGPL-2.1-or-later
+
+[Unit]
+Description=Temporary Directory /var/tmp/portage
+ConditionPathIsSymbolicLink=!/var/tmp/portage
+DefaultDependencies=no
+Conflicts=umount.target
+Before=local-fs.target umount.target
+After=swap.target
+
+[Mount]
+What=tmpfs
+Where=/var/tmp/portage
+Type=tmpfs
+Options=mode=775,uid=portage,gid=portage,size=16G
