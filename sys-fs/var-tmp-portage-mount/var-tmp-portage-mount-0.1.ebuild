@@ -9,6 +9,7 @@ HOMEPAGE="https://hoefling.io"
 
 LICENSE="GPL-2+"
 SLOT="0"
+KEYWORDS="amd64"
 
 src_install() {
 	systemd_dounit "${FILESDIR}/var-tmp-portage.mount"
