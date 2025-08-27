@@ -13,5 +13,4 @@ KEYWORDS="amd64"
 
 src_install() {
 	systemd_dounit "${FILESDIR}/var-tmp-portage.mount"
-	default
 }
