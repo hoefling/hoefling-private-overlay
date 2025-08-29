@@ -13,3 +13,6 @@ What=tmpfs
 Where=/var/tmp/portage
 Type=tmpfs
 Options=mode=775,uid=portage,gid=portage,size=16G
+
+[Install]
+WantedBy=multi-user.target
