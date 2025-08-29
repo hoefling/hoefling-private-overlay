@@ -9,6 +9,7 @@ HOMEPAGE="https://hoefling.io"
 
 LICENSE="GPL-2+"
 SLOT="0"
+S="${WORKDIR}/${PN}"
 KEYWORDS="amd64"
 
 src_install() {
