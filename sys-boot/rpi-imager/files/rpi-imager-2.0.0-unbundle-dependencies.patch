@@ -1,0 +1,485 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4f50e8d2..b800cb93 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,45 +28,11 @@ set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Which macOS architectur
+ 
+ project(rpi-imager LANGUAGES CXX C)
+ 
+-# Get version from git tag
+-find_package(Git QUIET)
+-if(GIT_FOUND)
+-    execute_process(
+-        COMMAND ${GIT_EXECUTABLE} describe --tags --always --dirty
+-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-        OUTPUT_VARIABLE GIT_DESCRIBE
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-        ERROR_QUIET
+-    )
+-endif()
+-
+-# Use git-derived version as the canonical version string
+-if(GIT_DESCRIBE)
+-    set(IMAGER_VERSION_STR "${GIT_DESCRIBE}")
+-    message(STATUS "Version from git: ${IMAGER_VERSION_STR}")
+-    
+-    # Extract numeric version components from git tag for Windows metadata
+-    # Expected format: v2.0.0 or v2.0.0-rc4-60-geac7c2f0
+-    string(REGEX MATCH "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+)" VERSION_MATCH "${GIT_DESCRIBE}")
+-    if(VERSION_MATCH)
+-        set(IMAGER_VERSION_MAJOR ${CMAKE_MATCH_1})
+-        set(IMAGER_VERSION_MINOR ${CMAKE_MATCH_2})
+-        set(IMAGER_VERSION_PATCH ${CMAKE_MATCH_3})
+-    else()
+-        # Fallback if tag doesn't match expected format
+-        set(IMAGER_VERSION_MAJOR 0)
+-        set(IMAGER_VERSION_MINOR 0)
+-        set(IMAGER_VERSION_PATCH 0)
+-        message(WARNING "Could not parse version from git tag: ${GIT_DESCRIBE}")
+-    endif()
+-else()
+-    # Fallback when git is not available or no tags exist
+-    set(IMAGER_VERSION_MAJOR 0)
+-    set(IMAGER_VERSION_MINOR 0)
+-    set(IMAGER_VERSION_PATCH 0)
+-    set(IMAGER_VERSION_STR "0.0.0-unknown")
+-    message(WARNING "Git not found or no tags available, using fallback version: ${IMAGER_VERSION_STR}")
+-endif()
++set(IMAGER_VERSION_MAJOR 2)
++set(IMAGER_VERSION_MINOR 0)
++set(IMAGER_VERSION_PATCH 0)
++set(IMAGER_VERSION_STR "2.0.0")
++message(STATUS "Version from hoefling-private Gentoo overlay: ${IMAGER_VERSION_STR}")
+ 
+ # Version variables for template substitution (Windows .rc, .manifest, etc.)
+ # Note: IMAGER_VERSION_STR is used in C++ code, so it needs to be a compile definition
+@@ -170,7 +136,7 @@ set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+ set(BUILD_STATIC_LIBS ON)
+ set(BUILD_SHARED_LIBS OFF)
+ 
+-include(FetchContent)
++#include(FetchContent)
+ 
+ # Bundled liblzma
+ include(dependencies/xz.cmake)
+@@ -347,11 +313,13 @@ if(GENERATE_TIMEZONES_FROM_IANA)
+         ${CMAKE_CURRENT_SOURCE_DIR}/timezones.txt
+         EXTRA_CMAKE_ARGS 
+             -DTZDATA_URL=${TZDATA_URL}
+-            -DTZDATA_DIR=${CMAKE_CURRENT_BINARY_DIR}/tzdata
++            -DTZDATA_DIR=/usr/share/zoneinfo
+     )
+     list(APPEND SOURCES "${GENERATED_TZ_QRC}")
+ endif()
+ 
++
++
+ option(GENERATE_COUNTRIES_FROM_REGDB "Generate countries list from latest wireless-regdb" ON)
+ 
+ if(GENERATE_COUNTRIES_FROM_REGDB)
+@@ -552,7 +520,7 @@ else()
+     include(linux/PlatformPackaging.cmake)
+ endif()
+ 
+-add_dependencies(${PROJECT_NAME} zlibstatic yescrypt)
++add_dependencies(${PROJECT_NAME} yescrypt)
+ include_directories(${CURL_INCLUDE_DIR} ${LibArchive_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIR} ${YESCRYPT_INCLUDE_DIR})
+ 
+ # Link different Qt components based on build type
+diff --git a/cmake/GenerateTimezones.cmake b/cmake/GenerateTimezones.cmake
+index 098c1d07..1127ba1c 100644
+--- a/cmake/GenerateTimezones.cmake
++++ b/cmake/GenerateTimezones.cmake
+@@ -6,10 +6,6 @@
+ cmake_minimum_required(VERSION 3.22)
+ 
+ # Validate required parameters
+-if(NOT DEFINED TZDATA_URL)
+-    message(FATAL_ERROR "TZDATA_URL must be defined")
+-endif()
+-
+ if(NOT DEFINED TZDATA_DIR)
+     message(FATAL_ERROR "TZDATA_DIR must be defined")
+ endif()
+@@ -22,53 +18,8 @@ if(NOT DEFINED SOURCE_DIR)
+     message(FATAL_ERROR "SOURCE_DIR must be defined")
+ endif()
+ 
+-set(TZDATA_ARCHIVE "${TZDATA_DIR}/tzdata.tar.gz")
+ set(ZONE_TAB_FILE "${TZDATA_DIR}/zone.tab")
+ 
+-message(STATUS "Downloading IANA timezone data from ${TZDATA_URL}")
+-
+-# Download the timezone data
+-file(DOWNLOAD "${TZDATA_URL}" "${TZDATA_ARCHIVE}" 
+-     SHOW_PROGRESS
+-     STATUS download_status
+-     LOG download_log
+-     TIMEOUT 30)
+-
+-# Check if download was successful
+-list(GET download_status 0 download_error)
+-if(download_error)
+-    list(GET download_status 1 download_message)
+-    message(WARNING "Failed to download timezone data: ${download_message}")
+-    message(STATUS "Attempting to use fallback timezone list...")
+-    
+-    # Try to find a fallback timezone file
+-    set(FALLBACK_FILE "${SOURCE_DIR}/timezones.txt.fallback")
+-    if(EXISTS "${FALLBACK_FILE}")
+-        message(STATUS "Using fallback timezone file: ${FALLBACK_FILE}")
+-        file(READ "${FALLBACK_FILE}" fallback_content)
+-        file(WRITE "${OUTPUT_FILE}" "${fallback_content}")
+-        message(STATUS "Fallback timezone list copied successfully")
+-        return()
+-    else()
+-        message(FATAL_ERROR "No fallback timezone file found at ${FALLBACK_FILE}")
+-    endif()
+-endif()
+-
+-message(STATUS "Extracting timezone data...")
+-
+-# Extract the archive
+-execute_process(
+-    COMMAND ${CMAKE_COMMAND} -E tar xzf "${TZDATA_ARCHIVE}"
+-    WORKING_DIRECTORY "${TZDATA_DIR}"
+-    RESULT_VARIABLE extract_result
+-    OUTPUT_VARIABLE extract_output
+-    ERROR_VARIABLE extract_error
+-)
+-
+-if(extract_result)
+-    message(FATAL_ERROR "Failed to extract timezone data: ${extract_error}")
+-endif()
+-
+ # Check if zone.tab exists
+ if(NOT EXISTS "${ZONE_TAB_FILE}")
+     message(FATAL_ERROR "zone.tab file not found in extracted data")
+@@ -231,4 +182,4 @@ endif()
+ # Clean up downloaded archive to save space
+ file(REMOVE "${TZDATA_ARCHIVE}")
+ 
+-message(STATUS "Timezone generation completed successfully")
+\ No newline at end of file
++message(STATUS "Timezone generation completed successfully")
+diff --git a/dependencies/curl.cmake b/dependencies/curl.cmake
+index 367b9180..989bdef3 100644
+--- a/dependencies/curl.cmake
++++ b/dependencies/curl.cmake
+@@ -2,11 +2,6 @@
+ 
+ set(CURL_VERSION "8.15.0")
+ string(REPLACE "." "_" CURL_TAG ${CURL_VERSION})
+-FetchContent_Declare(curl
+-    GIT_REPOSITORY https://github.com/curl/curl.git
+-    GIT_TAG curl-${CURL_TAG}
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+ set(BUILD_CURL_EXE OFF CACHE BOOL "" FORCE)
+ set(BUILD_LIBCURL_DOCS OFF CACHE BOOL "" FORCE)
+ set(BUILD_MISC_DOCS OFF CACHE BOOL "" FORCE)
+@@ -70,18 +65,9 @@ else()
+     if (WIN32)
+         set(CURL_USE_SCHANNEL ON)
+         set(CURL_DEFAULT_SSL_BACKEND "schannel")
+-    else ()
+-        set(CURL_USE_GNUTLS ON)
+-        set(CURL_DEFAULT_SSL_BACKEND "gnutls")
+     endif(WIN32)
+ endif(APPLE)
+ 
+-FetchContent_GetProperties(curl)
+-if(NOT curl_POPULATED)
+-    FetchContent_Populate(curl)
+-    add_subdirectory(${curl_SOURCE_DIR} ${curl_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+-
+ unset(BUILD_CURL_EXE)
+ unset(BUILD_LIBCURL_DOCS)
+ unset(BUILD_MISC_DOCS)
+@@ -141,8 +127,6 @@ unset(CURL_USE_SCHANNEL)
+ unset(CURL_USE_GNUTLS)
+ 
+ set(CURL_FOUND true CACHE BOOL "" FORCE)
+-set(CURL_LIBRARIES libcurl_static CACHE FILEPATH "" FORCE)
+-set(CURL_INCLUDE_DIR ${curl_SOURCE_DIR}/include CACHE PATH "" FORCE)
+-set(CURL_INCLUDE_DIRS ${curl_SOURCE_DIR}/include CACHE PATH "" FORCE)
+-
+-
++set(CURL_LIBRARIES /usr/lib64/libcurl.so CACHE FILEPATH "" FORCE)
++set(CURL_INCLUDE_DIR /usr/include/curl CACHE PATH "" FORCE)
++set(CURL_INCLUDE_DIRS /usr/include/curl CACHE PATH "" FORCE)
+diff --git a/dependencies/libarchive.cmake b/dependencies/libarchive.cmake
+index 943c326c..6414e1bf 100644
+--- a/dependencies/libarchive.cmake
++++ b/dependencies/libarchive.cmake
+@@ -27,66 +27,6 @@ set(ENABLE_ZSTD ON CACHE BOOL "")
+ set(POSIX_REGEX_LIB "libc" CACHE STRING "" FORCE)
+ set(LIBARCHIVE_VERSION "3.8.1")
+ 
+-# Patch to improve ZSTD static detection
+-set(LIBARCHIVE_PATCH_FILE "${CMAKE_CURRENT_BINARY_DIR}/libarchive_zstd_patch.cmake")
+-file(WRITE ${LIBARCHIVE_PATCH_FILE} "
+-# Read the original CMakeLists.txt
+-file(READ \"${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt\" CONTENT)
+-
+-# Find the start and end of the ZSTD section
+-string(FIND \"${CONTENT}\" \"IF(ZSTD_FOUND)\" ZSTD_START)
+-string(FIND \"${CONTENT}\" \"MARK_AS_ADVANCED(CLEAR ZSTD_INCLUDE_DIR)\" ZSTD_END)
+-
+-if(ZSTD_START GREATER -1 AND ZSTD_END GREATER -1)
+-    math(EXPR ZSTD_END \"${ZSTD_END} + 40\")
+-    string(SUBSTRING \"${CONTENT}\" 0 ${ZSTD_START} BEFORE_ZSTD)
+-    string(SUBSTRING \"${CONTENT}\" ${ZSTD_END} -1 AFTER_ZSTD)
+-    set(NEW_ZSTD_SECTION \"IF(ZSTD_FOUND)
+-  SET(HAVE_ZSTD_H 1)
+-  INCLUDE_DIRECTORIES(${ZSTD_INCLUDE_DIR})
+-  LIST(APPEND ADDITIONAL_LIBS ${ZSTD_LIBRARY})
+-  get_property(ZSTD_LIB_IS_CACHE CACHE ZSTD_LIBRARY PROPERTY TYPE)
+-  get_property(ZSTD_INC_IS_CACHE CACHE ZSTD_INCLUDE_DIR PROPERTY TYPE)
+-  if(ZSTD_LIB_IS_CACHE AND ZSTD_INC_IS_CACHE)
+-    message(STATUS \\\"Using provided ZSTD library: ${ZSTD_LIBRARY}\\\")
+-    SET(HAVE_LIBZSTD 1)
+-    SET(HAVE_ZSTD_compressStream 1)
+-    SET(HAVE_ZSTD_minCLevel 1)
+-  else()
+-    CMAKE_PUSH_CHECK_STATE()
+-    SET(CMAKE_REQUIRED_LIBRARIES ${ZSTD_LIBRARY})
+-    SET(CMAKE_REQUIRED_INCLUDES ${ZSTD_INCLUDE_DIR})
+-    CHECK_FUNCTION_EXISTS(ZSTD_decompressStream HAVE_LIBZSTD)
+-    CHECK_FUNCTION_EXISTS(ZSTD_compressStream HAVE_ZSTD_compressStream)
+-    CHECK_FUNCTION_EXISTS(ZSTD_minCLevel HAVE_ZSTD_minCLevel)
+-    CMAKE_POP_CHECK_STATE()
+-  endif()
+-ENDIF(ZSTD_FOUND)
+-MARK_AS_ADVANCED(CLEAR ZSTD_INCLUDE_DIR)\")
+-    set(NEW_CONTENT \"${BEFORE_ZSTD}${NEW_ZSTD_SECTION}\")
+-    file(WRITE \"${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt\" \"${NEW_CONTENT}${AFTER_ZSTD}\")
+-    message(STATUS \"Patched libarchive CMakeLists.txt for static ZSTD support\")
+-else()
+-    message(WARNING \"Could not find ZSTD section in libarchive CMakeLists.txt\")
+-endif()
+-")
+-
+-FetchContent_Declare(libarchive
+-    GIT_REPOSITORY https://github.com/libarchive/libarchive.git
+-    GIT_TAG v${LIBARCHIVE_VERSION}
+-    PATCH_COMMAND ${CMAKE_COMMAND} -P ${LIBARCHIVE_PATCH_FILE}
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+-FetchContent_GetProperties(libarchive)
+-if(NOT libarchive_POPULATED)
+-    FetchContent_Populate(libarchive)
+-    add_subdirectory(${libarchive_SOURCE_DIR} ${libarchive_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+-
+-if (TARGET archive_static AND TARGET ZLIB::ZLIB)
+-    add_dependencies(archive_static ZLIB::ZLIB)
+-endif()
+-
+ unset(POSIX_REGEX_LIB)
+ unset(ENABLE_WERROR)
+ unset(ENABLE_INSTALL)
+@@ -111,8 +51,8 @@ unset(ENABLE_CAT)
+ unset(ARCHIVE_BUILD_STATIC_LIBS)
+ unset(ENABLE_ZSTD)
+ set(LibArchive_FOUND true CACHE BOOL "" FORCE)
+-set(LibArchive_LIBRARIES archive_static CACHE FILEPATH "" FORCE)
+-set(LibArchive_INCLUDE_DIR ${libarchive_SOURCE_DIR}/libarchive CACHE PATH "" FORCE)
+-set(LibArchive_INCLUDE_DIRS ${libarchive_SOURCE_DIR}/libarchive CACHE PATH "" FORCE)
++set(LibArchive_LIBRARIES /usr/lib64/libarchive.so CACHE FILEPATH "" FORCE)
++set(LibArchive_INCLUDE_DIR /usr/include CACHE PATH "" FORCE)
++set(LibArchive_INCLUDE_DIRS /usr/include CACHE PATH "" FORCE)
+ 
+ 
+diff --git a/dependencies/nghttp2.cmake b/dependencies/nghttp2.cmake
+index bb6a84e3..ba75bb97 100644
+--- a/dependencies/nghttp2.cmake
++++ b/dependencies/nghttp2.cmake
+@@ -1,26 +1,12 @@
+ # Remote nghttp2
+ 
+ set(NGHTTP2_VERSION "1.67.0")
+-FetchContent_Declare(nghttp2
+-    GIT_REPOSITORY https://github.com/nghttp2/nghttp2.git
+-    GIT_TAG        v${NGHTTP2_VERSION}
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+ set(BUILD_EXAMPLES OFF)
+ set(ENABLE_LIB_ONLY ON)
+ set(ENABLE_FAILMALLOC OFF)
+-FetchContent_GetProperties(nghttp2)
+-if(NOT nghttp2_POPULATED)
+-    FetchContent_Populate(nghttp2)
+-    add_subdirectory(${nghttp2_SOURCE_DIR} ${nghttp2_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+ unset(ENABLE_LIB_ONLY)
+ unset(ENABLE_FAILMALLOC)
+ unset(BUILD_EXAMPLES)
+-set(NGHTTP2_LIBRARIES nghttp2_static CACHE FILEPATH "" FORCE)
+-set(NGHTTP2_LIBRARY nghttp2_static CACHE FILEPATH "" FORCE)
+-set(NGHTTP2_INCLUDE_DIR ${nghttp2_SOURCE_DIR}/lib CACHE PATH "" FORCE)
+-set(NGHTTP2_INCLUDE_DIRS ${nghttp2_SOURCE_DIR}/lib CACHE PATH "" FORCE)
+ set(NGHTTP2_FOUND true CACHE BOOL "" FORCE)
+ 
+ 
+diff --git a/dependencies/xz.cmake b/dependencies/xz.cmake
+index 5ecf26b9..35923aaf 100644
+--- a/dependencies/xz.cmake
++++ b/dependencies/xz.cmake
+@@ -1,11 +1,6 @@
+ # Bundled liblzma (xz)
+ 
+ set(LIBLZMA_VERSION "5.8.1")
+-FetchContent_Declare(xz
+-    GIT_REPOSITORY https://github.com/tukaani-project/xz.git
+-    GIT_TAG v${LIBLZMA_VERSION}
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+ set(XZ_MICROLZMA_DECODER OFF CACHE BOOL "" FORCE)
+ set(XZ_MICROLZMA_ENCODER OFF CACHE BOOL "" FORCE)
+ set(XZ_LZIP_DECODER OFF CACHE BOOL "" FORCE)
+@@ -24,11 +19,6 @@ set(XZ_ENCODERS
+ )
+ set(CREATE_LZMA_SYMLINKS OFF CACHE BOOL "" FORCE)
+ set(CREATE_XZ_SYMLINKS OFF CACHE BOOL "" FORCE)
+-FetchContent_GetProperties(xz)
+-if(NOT xz_POPULATED)
+-    FetchContent_Populate(xz)
+-    add_subdirectory(${xz_SOURCE_DIR} ${xz_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+ unset(XZ_MICROLZMA_DECODER)
+ unset(XZ_MICROLZMA_ENCODER)
+ unset(XZ_LZIP_DECODER)
+@@ -38,10 +28,10 @@ unset(XZ_ENABLE_DOXYGEN)
+ unset(CREATE_LZMA_SYMLINKS)
+ unset(CREATE_XZ_SYMLINKS)
+ set(LIBLZMA_FOUND true CACHE BOOL "" FORCE)
+-set(LIBLZMA_INCLUDE_DIR ${xz_SOURCE_DIR}/src/liblzma/api CACHE PATH "" FORCE)
+-set(LIBLZMA_INCLUDE_DIRS ${xz_SOURCE_DIR}/src/liblzma/api CACHE PATH "" FORCE)
+-set(LIBLZMA_LIBRARY liblzma CACHE FILEPATH "" FORCE)
+-set(LIBLZMA_LIBRARIES ${xz_BINARY_DIR}/liblzma.a CACHE FILEPATH "" FORCE)
++set(LIBLZMA_INCLUDE_DIR /usr/include/lzma CACHE PATH "" FORCE)
++set(LIBLZMA_INCLUDE_DIRS /usr/include/lzma CACHE PATH "" FORCE)
++set(LIBLZMA_LIBRARY /usr/lib64/liblzma.so CACHE FILEPATH "" FORCE)
++set(LIBLZMA_LIBRARIES /usr/lib64/liblzma.so CACHE FILEPATH "" FORCE)
+ set(LIBLZMA_HAS_AUTO_DECODER true CACHE BOOL "" FORCE)
+ set(LIBLZMA_HAS_EASY_ENCODER true CACHE BOOL "" FORCE)
+ set(LIBLZMA_HAS_LZMA_PRESET true CACHE BOOL "" FORCE)
+diff --git a/dependencies/zlib.cmake b/dependencies/zlib.cmake
+index 22cb3999..89cb7aa6 100644
+--- a/dependencies/zlib.cmake
++++ b/dependencies/zlib.cmake
+@@ -6,61 +6,19 @@ set(ZLIB_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+ set(ZLIB_BUILD_STATIC ON CACHE BOOL "" FORCE)
+ set(ZLIB_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+ set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
+-FetchContent_Declare(zlib
+-    GIT_REPOSITORY https://github.com/madler/zlib.git
+-    GIT_TAG 5a82f71ed1dfc0bec044d9702463dbdf84ea3b71 # v1.4.1.1, as of 27/05/2025
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+-FetchContent_GetProperties(zlib)
+-if(NOT zlib_POPULATED)
+-    FetchContent_Populate(zlib)
+-    add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+ unset(ZLIB_BUILD_EXAMPLES)
+ unset(ZLIB_BUILD_SHARED)
+ unset(ZLIB_BUILD_STATIC)
+ unset(ZLIB_BUILD_TESTS)
+ unset(SKIP_INSTALL_ALL)
+-# Set zlib variables that libarchive's CMake will use
+-set(ZLIB_USE_STATIC_LIBS ON CACHE BOOL "" FORCE) # Prefer static
+-set(ZLIB_ROOT ${zlib_SOURCE_DIR} CACHE PATH "" FORCE)
+-# Mingw vs others library naming
+-if (WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
+-    if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+-        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libzsd.a CACHE FILEPATH "" FORCE)
+-        set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libzsd.a CACHE STRING "" FORCE)
+-    else()
+-        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libzs.a CACHE FILEPATH "" FORCE)
+-        set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libzs.a CACHE STRING "" FORCE)
+-    endif()
+-else()
+-    set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a CACHE FILEPATH "" FORCE)
+-    set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libz.a CACHE STRING "" FORCE)
+-endif()
+-
+-set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} CACHE PATH "" FORCE)
+-set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR} CACHE PATH "" FORCE)
+-set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
+-add_library(ZLIB::ZLIB STATIC IMPORTED)
+-if (WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
+-    if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+-        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libzsd.a CACHE FILEPATH "" FORCE)
+-        set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libzsd.a CACHE STRING "" FORCE)
+-    else()
+-        set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libzs.a CACHE FILEPATH "" FORCE)
+-        set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libzs.a CACHE STRING "" FORCE)
+-    endif()
+-    set_target_properties(ZLIB::ZLIB PROPERTIES
+-        IMPORTED_LOCATION "${ZLIB_LIBRARY}"
+-        INTERFACE_INCLUDE_DIRECTORIES "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}"
+-    )
+-    add_dependencies(ZLIB::ZLIB zlibstatic)
+-else()
+-    set_target_properties(ZLIB::ZLIB PROPERTIES
+-        IMPORTED_LOCATION "${zlib_BINARY_DIR}/libz.a"
+-        INTERFACE_INCLUDE_DIRECTORIES "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}"
+-    )
+-    add_dependencies(ZLIB::ZLIB zlibstatic)
+-endif()
+-
+-
++#set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a CACHE FILEPATH "" FORCE)
++#set(ZLIB_LIBRARIES ${zlib_BINARY_DIR}/libz.a CACHE STRING "" FORCE)
++#set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} CACHE PATH "" FORCE)
++#set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR} CACHE PATH "" FORCE)
++#set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
++#add_library(ZLIB::ZLIB STATIC IMPORTED)
++#set_target_properties(ZLIB::ZLIB PROPERTIES
++#    IMPORTED_LOCATION "${zlib_BINARY_DIR}/libz.a"
++#    INTERFACE_INCLUDE_DIRECTORIES "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}"
++#)
++#add_dependencies(ZLIB::ZLIB zlibstatic)
+diff --git a/dependencies/zstd.cmake b/dependencies/zstd.cmake
+index 28a0f381..1557d334 100644
+--- a/dependencies/zstd.cmake
++++ b/dependencies/zstd.cmake
+@@ -1,22 +1,11 @@
+ # Bundled zstd
+ 
+ set(ZSTD_VERSION "1.5.7")
+-FetchContent_Declare(zstd
+-    GIT_REPOSITORY https://github.com/facebook/zstd.git
+-    GIT_TAG v${ZSTD_VERSION}
+-    SOURCE_SUBDIR build/cmake
+-    ${USE_OVERRIDE_FIND_PACKAGE}
+-)
+ set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+ set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+ set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
+ set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+ set(ZSTD_BUILD_DICTBUILDER OFF CACHE BOOL "" FORCE)
+-FetchContent_GetProperties(zstd)
+-if(NOT zstd_POPULATED)
+-    FetchContent_Populate(zstd)
+-    add_subdirectory(${zstd_SOURCE_DIR}/build/cmake ${zstd_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
+ unset(ZSTD_BUILD_PROGRAMS)
+ unset(ZSTD_BUILD_SHARED)
+ unset(ZSTD_BUILD_STATIC)
+@@ -24,12 +13,3 @@ unset(ZSTD_BUILD_TESTS)
+ unset(ZSTD_BUILD_DICTBUILDER)
+ set(ZSTD_FOUND true CACHE BOOL "" FORCE)
+ set(Zstd_VERSION ${ZSTD_VERSION} CACHE STRING "" FORCE)
+-set(Zstd_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-src/lib CACHE PATH "" FORCE)
+-set(ZSTD_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-src/lib CACHE PATH "" FORCE)
+-set(Zstd_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-src/lib CACHE PATH "" FORCE)
+-set(ZSTD_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-src/lib CACHE PATH "" FORCE)
+-set(Zstd_LIBRARIES libzstd_static CACHE FILEPATH "" FORCE)
+-set(ZSTD_LIBRARIES libzstd_static CACHE FILEPATH "" FORCE)
+-set(ZSTD_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/_deps/zstd-build/lib/libzstd.a CACHE FILEPATH "" FORCE)
+-
+-
