@@ -11,5 +11,5 @@ LICENSE=Apache-2.0
 RDEPEND=net-vpn/wireguard-tools net-firewall/iptables net-firewall/nftables systemd? ( sys-apps/systemd )
 SLOT=0
 SRC_URI=https://github.com/gravitl/netclient/archive/v1.0.0.tar.gz -> netclient-1.0.0.tar.gz https://github.com/hoefling/netclient-ebuild-deps/releases/download/v1.0.0/netclient-1.0.0-deps.tar.gz
-_eclasses_=multiprocessing	1e32df7deee68372153dca65f4a7c21f	toolchain-funcs	98d9f464d912ae6b7316fb8a3721f5db	flag-o-matic	a7afe42e95fb46ce9691605acfb24672	go-env	0e2babf96e7d0b045fc07ad199eb2399	go-module	d96f2a2fd6d8fbad6d94516bf238f885	systemd	a964c0cbe818b5729da1dbfcee5be861
+_eclasses_=multiprocessing	1e32df7deee68372153dca65f4a7c21f	toolchain-funcs	30214924c0c3b92ec7dbf24fc70d60d3	flag-o-matic	a7afe42e95fb46ce9691605acfb24672	go-env	0e2babf96e7d0b045fc07ad199eb2399	go-module	d96f2a2fd6d8fbad6d94516bf238f885	systemd	a964c0cbe818b5729da1dbfcee5be861
 _md5_=1153f8eee925e7c930ba02a13d4347a9
