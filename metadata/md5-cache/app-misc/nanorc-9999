@@ -10,4 +10,4 @@ PROPERTIES=live
 RDEPEND=app-editors/nano
 SLOT=0
 _eclasses_=git-r3	7b584b5dc33e3bc66ff5b9271bf41764
-_md5_=0c34768efc98d319c29cc8d40273001c
+_md5_=7e1e26a0654e5290267063bd3e33afe7
