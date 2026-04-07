@@ -8,4 +8,4 @@ LICENSE=GPL-3
 RDEPEND=app-editors/nano
 SLOT=0
 SRC_URI=https://github.com/scopatz/nanorc/releases/download/2020.10.10/nanorc-2020.10.10.tar.gz
-_md5_=27f5fd6f6a5e367a010057ac28c5f92f
+_md5_=484f6becef1ea32def26b59d033bafd8
