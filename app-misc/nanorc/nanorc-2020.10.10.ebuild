@@ -32,6 +32,6 @@ src_unpack() {
 
 src_install() {
 	default
-	insinto "${ED}/usr/local/share/nano"
+	insinto "/usr/local/share/nano"
 	doins "${S}"/*.nanorc
 }
