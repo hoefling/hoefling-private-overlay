@@ -1,0 +1,42 @@
+From 50ce52cbf98778eee14de5c10f34918c01a9654f Mon Sep 17 00:00:00 2001
+From: hdquemada <44162051+hdquemada@users.noreply.github.com>
+Date: Wed, 20 May 2020 13:49:26 -0400
+Subject: [PATCH 1/2] Update .gitignore
+
+---
+ .gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/.gitignore b/.gitignore
+index 86e1b445..e37f6e65 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -2,3 +2,5 @@ search_history
+ 
+ # Rever
+ rever/
++
++.DS_Store
+
+From aa82142a4154c60b1fc3c1b3c9d938451b553809 Mon Sep 17 00:00:00 2001
+From: Hector Quemada <hdquemada@gmail.com>
+Date: Thu, 14 Apr 2022 10:56:37 -0400
+Subject: [PATCH 2/2] Update nanorc.nanorc
+
+---
+ nanorc.nanorc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/nanorc.nanorc b/nanorc.nanorc
+index dd889fd9..75a708ff 100644
+--- a/nanorc.nanorc
++++ b/nanorc.nanorc
+@@ -23,7 +23,7 @@ icolor brightblue " brightblue"
+ icolor brightmagenta " brightmagenta"
+ icolor brightcyan " brightcyan"
+ icolor brightwhite " brightwhite"
+-icolor brightnormal " brightnormal"
++icolor normal " normal"
+ icolor ,black ",black "
+ icolor ,red ",red "
+ icolor ,green ",green "

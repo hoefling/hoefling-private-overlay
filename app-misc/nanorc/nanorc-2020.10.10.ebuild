@@ -14,6 +14,7 @@ else
 	SRC_URI="https://github.com/scopatz/nanorc/releases/download/${PV}/${P}.tar.gz"
 fi
 
+PATCHES=( "${FILESDIR}"/391.patch )
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="-* amd64"
