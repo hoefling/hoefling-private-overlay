@@ -19,7 +19,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 
 KEYWORDS="~amd64"
-IUSE="gnutls qt6 telemetry"
+IUSE="gnutls telemetry"
 
 RDEPEND="
 	app-arch/libarchive:=
@@ -34,33 +34,18 @@ RDEPEND="
 	net-libs/nghttp2
 	gnutls? ( net-libs/gnutls:= )
 	!gnutls? ( dev-libs/openssl:= )
-	qt6? (
-		dev-qt/qtbase:6[concurrent,dbus,gui,network,widgets]
-		dev-qt/qtdeclarative:6[svg]
-	)
-	!qt6? (
-		dev-qt/qtconcurrent:5
-		dev-qt/qtcore:5
-		dev-qt/qtdbus:5
-		dev-qt/qtdeclarative:5
-		dev-qt/qtgui:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtquickcontrols2:5
-		dev-qt/qtsvg:5
-		dev-qt/qtwidgets:5
-	)
+	dev-qt/qtbase:6[concurrent,dbus,gui,network,widgets]
+	dev-qt/qtdeclarative:6[svg]
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
 	net-misc/curl
-	qt6? ( dev-qt/qttools:6[linguist] )
-	!qt6? ( dev-qt/linguist-tools:5 )
+	dev-qt/qttools:6[linguist]
 "
 
 src_configure() {
 	local mycmakeargs=(
 		$(cmake_use_find_package gnutls GnuTLS)
-		$(cmake_use_find_package !qt6 Qt5)
 		-DENABLE_TELEMETRY=$(usex telemetry)
 		-DENABLE_CHECK_VERSION=NO
 	)
