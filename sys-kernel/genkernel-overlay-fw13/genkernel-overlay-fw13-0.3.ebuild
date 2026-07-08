@@ -17,7 +17,7 @@ RDEPEND="virtual/tmpfiles"
 S="${WORKDIR}"
 
 src_install() {
-	insinto /var/lib/genkernel-overlay/lib/udev/rules.d
+	insinto /var/lib/genkernel-overlay/etc/udev/rules.d
 	doins "${FILESDIR}"/69-dm-lvm.rules
 
 	keepdir /var/lib/genkernel-overlay/dev
