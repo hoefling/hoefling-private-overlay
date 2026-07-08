@@ -1,0 +1,2 @@
+# Masked by sys-kernel/genkernel-overlay-framework-13: genkernel's linuxrc (dolvm)
+# activates VGs itself; systemd-run does not exist in this initramfs.
