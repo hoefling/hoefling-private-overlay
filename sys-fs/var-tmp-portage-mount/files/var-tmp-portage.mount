@@ -12,7 +12,7 @@ After=swap.target
 What=tmpfs
 Where=/var/tmp/portage
 Type=tmpfs
-Options=mode=775,uid=portage,gid=portage,size=16G
+Options=mode=775,uid=portage,gid=portage,size=48G
 
 [Install]
 WantedBy=multi-user.target
