@@ -9,5 +9,5 @@ LICENSE=GPL-3
 PROPERTIES=live
 RDEPEND=app-editors/nano
 SLOT=0
-_eclasses_=git-r3	7b584b5dc33e3bc66ff5b9271bf41764
+_eclasses_=git-r3	e6c2f983e006e805160436c75a0c1562
 _md5_=89374a64c3039a4e16a0d251637d1107
