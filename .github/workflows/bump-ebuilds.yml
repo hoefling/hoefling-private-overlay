@@ -23,7 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          emerge --sync --quiet
           cat > /etc/portage/binrepos.conf/gentoo.conf <<EOF
           [gentoo]
           priority = 9999
@@ -33,6 +32,7 @@ jobs:
           EOF
           printf 'FEATURES="getbinpkg"\n' >> /etc/portage/make.conf
 
+          emerge --sync --quiet
           emerge --oneshot --quiet dev-vcs/git dev-util/pkgdev dev-python/pyyaml
 
       - name: Configure Git
