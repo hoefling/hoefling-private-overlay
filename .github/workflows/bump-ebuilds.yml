@@ -16,11 +16,6 @@ jobs:
       image: gentoo/stage3:latest
 
     steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
       - name: Install dependencies
         run: |
           cat > /etc/portage/binrepos.conf/gentoo.conf <<EOF
@@ -39,6 +34,11 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Debug git state
         working-directory: ${{ github.workspace }}
