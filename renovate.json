@@ -7,20 +7,20 @@
 
   "customManagers": [
     {
-      "customType": "regex",
+      "customType": "jsonata",
+      "fileFormat": "yaml",
       "managerFilePatterns": [
-        "/^\\.github/\\.renovate/packages\\.yml$/"
+        ".github/.renovate/packages.yml"
       ],
       "matchStrings": [
-        "- atom: (?<atom>[^\\n]+)\\n  datasource: (?<datasource>[^\\n]+)\\n  depName: (?<depName>[^\\n]+)\\n  version: (?<currentValue>[^\\n]+)"
-      ],
-      "autoReplaceStringTemplate": "- atom: {{{atom}}}\n  datasource: {{{datasource}}}\n  depName: {{{depName}}}\n  version: {{{newValue}}}"
+        "packages.{ \"depName\": depName, \"currentValue\": version, \"datasource\": datasource }"
+      ]
     }
   ],
 
   "postUpgradeTasks": {
     "commands": [
-      ".github/bin/bump-ebuild {{{depName}}} {{{newValue}}}"
+      ".github/bin/bump-ebuild {{{depName}}} {{{newVersion}}}"
     ],
     "fileFilters": [
       ".github/.renovate/packages.yml",
