@@ -24,8 +24,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          emerge --sync
-          emerge --oneshot dev-vcs/git dev-util/pkgdev dev-python/pyyaml
+          emerge --sync --quiet
+          emerge --oneshot --quiet dev-vcs/git dev-util/pkgdev dev-python/pyyaml
 
       - name: Configure Git
         run: |
