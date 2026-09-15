@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Install dependencies
         env:
-          USE: "-keyring"
+          USE: "abi_x86_32"
         run: |
           cat > /etc/portage/binrepos.conf/gentoo.conf <<EOF
           [gentoo]
