@@ -57,6 +57,7 @@ jobs:
 
       - name: Commit ebuild updates
         run: |
+          git add .
           pkgdev commit
 
       - name: Push changes
