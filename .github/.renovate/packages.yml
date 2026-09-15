@@ -4,7 +4,17 @@ packages:
     depName: siderolabs/talos
     version: 1.13.8
 
+  - atom: app-admin/helmwave
+    datasource: github-releases
+    depName: helmwave/helmwave
+    version: 0.42.1
+
   - atom: app-admin/topf
     datasource: github-releases
     depName: postfinance/topf
     version: 0.6.0
+
+  - atom: net-vpn/netclient
+    datasource: github-releases
+    depName: gravitl/netclient
+    version: 1.5.1

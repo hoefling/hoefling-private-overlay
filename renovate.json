@@ -26,6 +26,8 @@
       ".github/.renovate/packages.yml",
       "app-admin/**/Manifest",
       "app-admin/**/*.ebuild"
+      "net-vpn/**/Manifest",
+      "net-vpn/**/*.ebuild"
     ],
     "executionMode": "update"
   }
