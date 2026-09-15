@@ -37,8 +37,6 @@ jobs:
 
       - name: Checkout PR branch
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 1
 
       - name: Debug git state
         working-directory: ${{ github.workspace }}
@@ -48,6 +46,7 @@ jobs:
           pwd
           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch
 
           ls -la
           ls -la "$GITHUB_WORKSPACE"
@@ -85,6 +84,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           git config --global --add safe.directory $GITHUB_WORKSPACE
+          git fetch
           .github/bin/bump-ebuild
 
       - name: Commit changes
