@@ -37,6 +37,9 @@ jobs:
 
       - name: Checkout PR branch
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
 
       - name: Fetch PR base
         working-directory: ${{ github.workspace }}
