@@ -2,7 +2,7 @@ packages:
   - atom: app-admin/talosctl
     datasource: github-releases
     depName: siderolabs/talos
-    version: 1.13.8
+    version: 1.13.9
 
   - atom: app-admin/helmwave
     datasource: github-releases

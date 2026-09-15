@@ -12,44 +12,73 @@ jobs:
   bump-ebuilds:
     runs-on: ubuntu-latest
 
+    container:
+      image: gentoo/stage3:latest
+
     steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          cat > /etc/portage/binrepos.conf/gentoo.conf <<EOF
+          [gentoo]
+          priority = 9999
+          sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64/
+          verify-signature = true
+          location = /var/cache/binhost/gentoo
+          EOF
+          printf 'FEATURES="getbinpkg binpkg-request-signature"\n' >> /etc/portage/make.conf
+
+          emerge --sync --quiet
+          emerge --oneshot --quiet --getbinpkg dev-vcs/git dev-util/pkgdev dev-python/pyyaml
 
       - name: Configure Git
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
         with:
-          python-version: '3.x'
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install pkgdev PyYAML
-
-      - name: Update ebuilds
+      - name: Fetch PR base
+        working-directory: ${{ github.workspace }}
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags origin "$BASE_SHA"
+
+      - name: Update ebuilds
+        working-directory: ${{ github.workspace }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git fetch
           .github/bin/bump-ebuild
 
-      - name: Commit changes
+      - name: Check for changes
+        id: changes
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-
-          git add app-admin net-vpn
-
-          if git diff --cached --quiet; then
-            echo "No ebuild changes"
-            exit 0
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No ebuild changes."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat
           fi
 
-          git commit -m 'chore: update Gentoo ebuilds'
-          git push
+      - name: Commit ebuild updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git add .
+          pkgdev commit
+
+      - name: Push changes
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          git push origin HEAD:"$BRANCH"
+
