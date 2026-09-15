@@ -24,17 +24,11 @@ jobs:
           sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64/
           verify-signature = true
           location = /var/cache/binhost/gentoo
-
-          [gentoo-x86]
-          priority = 100
-          sync-uri = https://distfiles.gentoo.org/releases/x86/binpackages/23.0/i686/
-          verify-signature = true
-          location = /var/cache/binhost/gentoo-x86
           EOF
           printf 'FEATURES="getbinpkg binpkg-request-signature"\n' >> /etc/portage/make.conf
 
           emerge --sync --quiet
-          emerge --oneshot --quiet --getbinpkg --usepkgonly dev-vcs/git dev-util/pkgdev dev-python/pyyaml
+          emerge --oneshot --quiet --getbinpkg dev-vcs/git dev-util/pkgdev dev-python/pyyaml
 
       - name: Configure Git
         run: |
