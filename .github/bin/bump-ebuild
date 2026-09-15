@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-import argparse
+import os
 import subprocess
+import tempfile
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -13,48 +15,58 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 PACKAGES_FILE = ROOT / ".github" / ".renovate" / "packages.yml"
 
 
-def load_packages() -> list[dict[str, str]]:
-    with PACKAGES_FILE.open() as f:
+def load_packages(path: Path) -> list[dict[str, Any]]:
+    with path.open() as f:
         data = yaml.safe_load(f)
 
     return data["packages"]
 
 
-def find_package(dep_name: str) -> dict[str, str]:
-    matches = [
-        package
-        for package in load_packages()
-        if package["depName"] == dep_name
-    ]
+def load_base_packages() -> list[dict[str, Any]]:
+    base_sha = os.environ.get("GITHUB_BASE_SHA")
 
-    if len(matches) != 1:
+    if not base_sha:
         raise RuntimeError(
-            f"Expected exactly one package for {dep_name!r}, "
-            f"found {len(matches)}"
+            "GITHUB_BASE_SHA is not set; this script is intended "
+            "to run from a pull_request workflow"
         )
 
-    return matches[0]
+    result = subprocess.run(
+        [
+            "git",
+            "show",
+            f"{base_sha}:.github/.renovate/packages.yml",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    data = yaml.safe_load(result.stdout)
+    return data["packages"]
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("dep_name")
-    parser.add_argument("new_version")
-    args = parser.parse_args()
+def packages_by_atom(
+    packages: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    return {package["atom"]: package for package in packages}
 
-    package = find_package(args.dep_name)
 
-    atom = package["atom"]
-    current_version = package["version"]
-    new_version = args.new_version
-
+def copy_ebuild(
+    atom: str,
+    old_version: str,
+    new_version: str,
+) -> None:
     category, name = atom.split("/", 1)
     package_dir = ROOT / category / name
 
     if not package_dir.is_dir():
-        raise RuntimeError(f"Package directory does not exist: {package_dir}")
+        raise RuntimeError(
+            f"Package directory does not exist: {package_dir}"
+        )
 
-    old_ebuild = package_dir / f"{name}-{current_version}.ebuild"
+    old_ebuild = package_dir / f"{name}-{old_version}.ebuild"
 
     if not old_ebuild.is_file():
         raise RuntimeError(
@@ -64,16 +76,43 @@ def main() -> None:
     new_ebuild = package_dir / f"{name}-{new_version}.ebuild"
 
     if new_ebuild.exists():
-        print(f"{atom}-{new_version} already exists")
+        print(f"{atom}: {new_version} already exists")
     else:
-        print(f"Creating {new_ebuild}")
-        shutil.copy2(old_ebuild, new_ebuild)
+        print(f"{atom}: {old_version} -> {new_version}")
+        new_ebuild.write_bytes(old_ebuild.read_bytes())
 
     subprocess.run(
         ["pkgdev", "manifest", str(package_dir)],
         cwd=ROOT,
         check=True,
     )
+
+
+def main() -> None:
+    current = packages_by_atom(load_packages(PACKAGES_FILE))
+    base = packages_by_atom(load_base_packages())
+
+    for atom, package in current.items():
+        new_version = package["version"]
+
+        old_package = base.get(atom)
+
+        if old_package is None:
+            raise RuntimeError(
+                f"{atom} was added to packages.yml, but no existing "
+                "ebuild version is known"
+            )
+
+        old_version = old_package["version"]
+
+        if old_version == new_version:
+            continue
+
+        copy_ebuild(
+            atom,
+            old_version,
+            new_version,
+        )
 
 
 if __name__ == "__main__":
