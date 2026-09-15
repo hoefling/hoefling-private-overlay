@@ -31,7 +31,6 @@ def load_base_packages() -> list[dict[str, Any]]:
             "to run from a pull_request workflow"
         )
 
-    print("running", "git", "show", f"{base_sha}:.github/.renovate/packages.yml")
     result = subprocess.run(
         [
             "git",
@@ -39,11 +38,10 @@ def load_base_packages() -> list[dict[str, Any]]:
             f"{base_sha}:.github/.renovate/packages.yml",
         ],
         cwd=ROOT,
-        #check=True,
+        check=True,
         capture_output=True,
         text=True,
     )
-    print(result.stderr)
 
     data = yaml.safe_load(result.stdout)
     return data["packages"]
