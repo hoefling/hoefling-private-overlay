@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  "extends": [
+    "config:recommended"
+  ],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.renovate/packages\\.yml$/"
+      ],
+      "matchStrings": [
+        "- atom: (?<atom>[^\\n]+)\\n  datasource: (?<datasource>[^\\n]+)\\n  depName: (?<depName>[^\\n]+)\\n  version: (?<currentValue>[^\\n]+)"
+      ],
+      "autoReplaceStringTemplate": "- atom: {{{atom}}}\n  datasource: {{{datasource}}}\n  depName: {{{depName}}}\n  version: {{{newValue}}}"
+    }
+  ],
+
+  "postUpgradeTasks": {
+    "commands": [
+      ".github/bin/bump-ebuild {{{depName}}} {{{newValue}}}"
+    ],
+    "fileFilters": [
+      ".renovate/packages.yml",
+      "app-admin/**/Manifest",
+      "app-admin/**/*.ebuild"
+    ],
+    "executionMode": "update"
+  }
+}

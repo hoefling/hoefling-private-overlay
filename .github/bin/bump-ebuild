@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import argparse
+import subprocess
+from pathlib import Path
+
+import yaml
+
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+PACKAGES_FILE = ROOT / ".github" / ".renovate" / "packages.yml"
+
+
+def load_packages() -> list[dict[str, str]]:
+    with PACKAGES_FILE.open() as f:
+        data = yaml.safe_load(f)
+
+    return data["packages"]
+
+
+def find_package(dep_name: str) -> dict[str, str]:
+    matches = [
+        package
+        for package in load_packages()
+        if package["depName"] == dep_name
+    ]
+
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"Expected exactly one package for {dep_name!r}, "
+            f"found {len(matches)}"
+        )
+
+    return matches[0]
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dep_name")
+    parser.add_argument("new_version")
+    args = parser.parse_args()
+
+    package = find_package(args.dep_name)
+
+    atom = package["atom"]
+    current_version = package["version"]
+    new_version = args.new_version
+
+    category, name = atom.split("/", 1)
+    package_dir = ROOT / category / name
+
+    if not package_dir.is_dir():
+        raise RuntimeError(f"Package directory does not exist: {package_dir}")
+
+    old_ebuild = package_dir / f"{name}-{current_version}.ebuild"
+
+    if not old_ebuild.is_file():
+        raise RuntimeError(
+            f"Expected current ebuild does not exist: {old_ebuild}"
+        )
+
+    new_ebuild = package_dir / f"{name}-{new_version}.ebuild"
+
+    if new_ebuild.exists():
+        print(f"{atom}-{new_version} already exists")
+    else:
+        print(f"Creating {new_ebuild}")
+        shutil.copy2(old_ebuild, new_ebuild)
+
+    subprocess.run(
+        ["pkgdev", "manifest", str(package_dir)],
+        cwd=ROOT,
+        check=True,
+    )
+
+
+if __name__ == "__main__":
+    main()
