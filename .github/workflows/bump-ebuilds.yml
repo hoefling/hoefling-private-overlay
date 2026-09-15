@@ -41,7 +41,14 @@ jobs:
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
       - name: Debug git state
+        working-directory: ${{ github.workspace }}
         run: |
+          pwd
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          ls -la
+          ls -la "$GITHUB_WORKSPACE"
+          ls -la "$GITHUB_WORKSPACE/.git" || true
+
           echo "HEAD:"
           git rev-parse HEAD
 
@@ -63,6 +70,7 @@ jobs:
           git log --oneline --all -10
 
       - name: Update ebuilds
+        working-directory: ${{ github.workspace }}
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
