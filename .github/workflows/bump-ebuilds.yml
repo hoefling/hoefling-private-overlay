@@ -38,45 +38,13 @@ jobs:
       - name: Checkout PR branch
         uses: actions/checkout@v7
 
-      - name: Debug git state
+      - name: Fetch PR base
         working-directory: ${{ github.workspace }}
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          pwd
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git fetch
-
-          ls -la
-          ls -la "$GITHUB_WORKSPACE"
-          ls -la "$GITHUB_WORKSPACE/.git" || true
-
-          git status
-
-          echo "HEAD:"
-          git rev-parse HEAD
-
-          echo "Branches:"
-          git branch -a
-
-          echo "Remotes:"
-          git remote -v
-
-          echo "Log:"
-          git log --oneline --all -10
-
-          echo "Base SHA:"
-          echo "${{ github.event.pull_request.base.sha }}"
-
-          echo "Base commit available:"
-          git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}" \
-            && echo yes \
-            || echo no
-
-          git show --no-patch "$BASE_SHA"
-          git show "$BASE_SHA:.github/.renovate/packages.yml"
-
+          git fetch --no-tags origin "$BASE_SHA"
 
       - name: Update ebuilds
         working-directory: ${{ github.workspace }}
@@ -87,17 +55,10 @@ jobs:
           git fetch
           .github/bin/bump-ebuild
 
-      - name: Commit changes
+      - name: Commit ebuild updates
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          pkgdev commit
 
-          git add app-admin net-vpn
-
-          if git diff --cached --quiet; then
-            echo "No ebuild changes"
-            exit 0
-          fi
-
-          git commit -m 'chore: update Gentoo ebuilds'
-          git push
+      - name: Push changes
+        run: |
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
