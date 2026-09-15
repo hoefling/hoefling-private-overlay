@@ -17,4 +17,4 @@ packages:
   - atom: net-vpn/netclient
     datasource: github-releases
     depName: gravitl/netclient
-    version: 1.5.1
+    version: 1.7.0
