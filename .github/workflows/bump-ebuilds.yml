@@ -40,6 +40,28 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
+      - name: Debug git state
+        run: |
+          echo "HEAD:"
+          git rev-parse HEAD
+
+          echo "Base SHA:"
+          echo "${{ github.event.pull_request.base.sha }}"
+
+          echo "Base commit available:"
+          git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}" \
+            && echo yes \
+            || echo no
+
+          echo "Branches:"
+          git branch -a
+
+          echo "Remotes:"
+          git remote -v
+
+          echo "Log:"
+          git log --oneline --all -10
+
       - name: Update ebuilds
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
