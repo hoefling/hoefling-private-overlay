@@ -42,6 +42,8 @@ jobs:
 
       - name: Debug git state
         working-directory: ${{ github.workspace }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           pwd
           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
@@ -56,14 +58,6 @@ jobs:
           echo "HEAD:"
           git rev-parse HEAD
 
-          echo "Base SHA:"
-          echo "${{ github.event.pull_request.base.sha }}"
-
-          echo "Base commit available:"
-          git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}" \
-            && echo yes \
-            || echo no
-
           echo "Branches:"
           git branch -a
 
@@ -72,6 +66,18 @@ jobs:
 
           echo "Log:"
           git log --oneline --all -10
+
+          echo "Base SHA:"
+          echo "${{ github.event.pull_request.base.sha }}"
+
+          echo "Base commit available:"
+          git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}" \
+            && echo yes \
+            || echo no
+
+          git show --no-patch "$BASE_SHA"
+          git show "$BASE_SHA:.github/.renovate/packages.yml"
+
 
       - name: Update ebuilds
         working-directory: ${{ github.workspace }}
