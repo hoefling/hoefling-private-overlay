@@ -34,6 +34,8 @@ jobs:
           python -m pip install pkgdev PyYAML
 
       - name: Update ebuilds
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           .github/bin/bump-ebuild
 

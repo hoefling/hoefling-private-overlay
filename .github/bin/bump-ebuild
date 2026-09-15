@@ -23,11 +23,11 @@ def load_packages(path: Path) -> list[dict[str, Any]]:
 
 
 def load_base_packages() -> list[dict[str, Any]]:
-    base_sha = os.environ.get("GITHUB_BASE_SHA")
+    base_sha = os.environ.get("BASE_SHA")
 
     if not base_sha:
         raise RuntimeError(
-            "GITHUB_BASE_SHA is not set; this script is intended "
+            "BASE_SHA is not set; this script is intended "
             "to run from a pull_request workflow"
         )
 
