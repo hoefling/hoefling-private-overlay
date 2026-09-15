@@ -45,6 +45,8 @@ jobs:
         run: |
           pwd
           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
           ls -la
           ls -la "$GITHUB_WORKSPACE"
           ls -la "$GITHUB_WORKSPACE/.git" || true
@@ -76,6 +78,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
           .github/bin/bump-ebuild
 
       - name: Commit changes
