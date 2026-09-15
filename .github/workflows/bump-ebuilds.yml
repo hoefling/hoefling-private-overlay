@@ -58,11 +58,27 @@ jobs:
           git fetch
           .github/bin/bump-ebuild
 
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No ebuild changes."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat
+          fi
+
       - name: Commit ebuild updates
+        if: steps.changes.outputs.changed == 'true'
         run: |
           git add .
           pkgdev commit
 
       - name: Push changes
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin HEAD:"$BRANCH"
+
