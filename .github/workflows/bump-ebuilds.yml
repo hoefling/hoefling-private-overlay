@@ -12,9 +12,6 @@ jobs:
   bump-ebuilds:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     container:
       image: gentoo/stage3:latest
 
