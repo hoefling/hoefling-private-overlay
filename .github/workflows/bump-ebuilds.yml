@@ -4,9 +4,14 @@ on:
   pull_request:
     paths:
       - '.github/.renovate/packages.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: bump-ebuilds-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   bump-ebuilds:
@@ -30,55 +35,39 @@ jobs:
           emerge --sync --quiet
           emerge --oneshot --quiet --getbinpkg dev-vcs/git dev-util/pkgdev dev-python/pyyaml
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-
+      # A token other than GITHUB_TOKEN is required: pushes made with the
+      # latter do not trigger other workflows (i.e. pkgcheck) on the PR.
       - name: Checkout PR branch
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 1
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.BUMP_TOKEN || github.token }}
 
-      - name: Fetch PR base
-        working-directory: ${{ github.workspace }}
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      - name: Configure Git
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git fetch --no-tags origin "$BASE_SHA"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Update ebuilds
-        working-directory: ${{ github.workspace }}
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          git fetch
-          .github/bin/bump-ebuild
+        run: .github/bin/bump-ebuild --commit
 
-      - name: Check for changes
-        id: changes
+      - name: Regenerate metadata
         run: |
-          if git diff --quiet; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No ebuild changes."
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-            git diff --stat
+          egencache --update --jobs "$(nproc)" \
+            --repo hoefling-private \
+            --repositories-configuration "[hoefling-private]
+          location = $GITHUB_WORKSPACE
+          "
+          git add --all metadata/md5-cache
+          if ! git diff --cached --quiet; then
+            git commit --quiet -m "metadata/md5-cache: update metadata"
           fi
 
-      - name: Commit ebuild updates
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          git add .
-          pkgdev commit
-
       - name: Push changes
-        if: steps.changes.outputs.changed == 'true'
-        env:
-          BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          git push origin HEAD:"$BRANCH"
-
+          if [ "$(git rev-parse HEAD)" = "$(git rev-parse "origin/${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}")" ]; then
+            echo "No changes to push."
+          else
+            git push origin "HEAD:${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          fi
