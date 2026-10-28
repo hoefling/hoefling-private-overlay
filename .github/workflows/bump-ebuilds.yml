@@ -54,11 +54,25 @@ jobs:
 
       - name: Regenerate metadata
         run: |
-          egencache --update --jobs "$(nproc)" \
-            --repo hoefling-private \
-            --repositories-configuration "[hoefling-private]
+          # Register the overlay next to the stock config. Overriding the
+          # whole config (--repositories-configuration) drops the 'gentoo'
+          # master repo, so no category/eclass is found and egencache
+          # "successfully" prunes every cache entry.
+          mkdir -p /etc/portage/repos.conf
+          cat > /etc/portage/repos.conf/hoefling-private.conf <<EOF
+          [hoefling-private]
           location = $GITHUB_WORKSPACE
-          "
+          EOF
+          egencache --update --jobs "$(nproc)" --repo hoefling-private
+
+          # Guard: every ebuild must have a cache entry and vice versa.
+          expected=$(find . -mindepth 3 -maxdepth 3 -name '*.ebuild' -not -path './.git/*' | wc -l)
+          actual=$(find metadata/md5-cache -type f | wc -l)
+          if [ "$expected" -ne "$actual" ]; then
+            echo "::error::md5-cache has $actual entries for $expected ebuilds; refusing to commit"
+            exit 1
+          fi
+
           git add --all metadata/md5-cache
           if ! git diff --cached --quiet; then
             git commit --quiet -m "metadata/md5-cache: update metadata"
