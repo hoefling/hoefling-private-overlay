@@ -12,7 +12,7 @@ packages:
   - atom: app-admin/topf
     datasource: github-releases
     depName: postfinance/topf
-    version: 0.6.0
+    version: 0.6.2
 
   - atom: net-vpn/netclient
     datasource: github-releases
