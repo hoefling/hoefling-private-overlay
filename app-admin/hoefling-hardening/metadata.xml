@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<name>Donald Hoefling</name>
+	</maintainer>
+	<use>
+		<flag name="firewall">Install an inbound default-deny nftables policy and its systemd unit</flag>
+		<flag name="libvirt">Mask libvirt's remote TCP/TLS listener sockets (libvirtd and virtproxyd)</flag>
+		<flag name="resolved">Disable LLMNR and mDNS announcements in systemd-resolved</flag>
+	</use>
+</pkgmetadata>

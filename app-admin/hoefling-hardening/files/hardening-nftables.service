@@ -1,0 +1,17 @@
+[Unit]
+Description=Inbound default-deny nftables policy (hoefling-hardening)
+Documentation=man:nft(8)
+DefaultDependencies=no
+Wants=network-pre.target
+Before=network-pre.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/nft -f /etc/nftables.d/50-hardening-inbound.nft
+ExecReload=/sbin/nft -f /etc/nftables.d/50-hardening-inbound.nft
+ExecStop=/sbin/nft delete table inet hardening
+
+[Install]
+WantedBy=sysinit.target

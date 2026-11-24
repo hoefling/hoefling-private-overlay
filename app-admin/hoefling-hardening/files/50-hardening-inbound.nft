@@ -1,0 +1,37 @@
+#!/sbin/nft -f
+# Inbound default-deny policy. Installed by app-admin/hoefling-hardening.
+# Lives in its own table, so it coexists with libvirt/docker/netclient tables.
+# Reload after edits: systemctl reload hardening-nftables.service
+
+table inet hardening
+delete table inet hardening
+
+table inet hardening {
+	chain input {
+		type filter hook input priority filter; policy drop;
+
+		ct state vmap { established : accept, related : accept, invalid : drop }
+		iifname "lo" accept
+
+		# ICMP errors, PMTU discovery, ping. ICMPv6 neighbour discovery is required for IPv6.
+		icmp type { echo-request, destination-unreachable, time-exceeded, parameter-problem } accept
+		icmpv6 type { echo-request, destination-unreachable, packet-too-big, time-exceeded,
+			parameter-problem, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert,
+			mld-listener-query } accept
+
+		# DHCPv6 replies (unicast answer to a multicast request, so conntrack can't match it)
+		ip6 saddr fe80::/10 udp dport 546 accept
+
+		# mDNS multicast (.local names, printers); responses are not conntrack-matched
+		ip daddr 224.0.0.251 udp dport 5353 accept
+		ip6 daddr ff02::fb udp dport 5353 accept
+
+		# libvirt NAT networks: DHCP and DNS for guests
+		iifname "virbr*" udp dport { 53, 67 } accept
+		iifname "virbr*" tcp dport 53 accept
+
+		# VPN/overlay interfaces get no implicit trust. Explicit exceptions go below, e.g.:
+		#   udp dport 51821 accept                        # WireGuard listen port, if peers must initiate
+		#   iifname "wlan0" tcp dport 22000 accept        # Syncthing on the home LAN only
+	}
+}
