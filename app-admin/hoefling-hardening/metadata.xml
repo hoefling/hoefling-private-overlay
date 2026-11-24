@@ -7,6 +7,7 @@
 	<use>
 		<flag name="firewall">Install an inbound default-deny nftables policy and its systemd unit</flag>
 		<flag name="libvirt">Mask libvirt's remote TCP/TLS listener sockets (libvirtd and virtproxyd)</flag>
+		<flag name="sysctl">Disable IP forwarding and ICMP redirects/source routing via sysctl.d</flag>
 		<flag name="resolved">Disable LLMNR and mDNS announcements in systemd-resolved</flag>
 	</use>
 </pkgmetadata>
