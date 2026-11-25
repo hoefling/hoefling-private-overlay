@@ -11,7 +11,7 @@ S="${WORKDIR}"
 
 LICENSE="CC0-1.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 IUSE="+firewall +libvirt +resolved +sysctl"
 
 # Unit files and drop-ins are inert without systemd, so no dependency on it
