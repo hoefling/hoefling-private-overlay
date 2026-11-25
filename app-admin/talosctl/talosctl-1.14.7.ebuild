@@ -21,7 +21,7 @@ LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 
-BDEPEND=">=dev-lang/go-1.26.7:="
+BDEPEND=">=dev-lang/go-1.27.0:="
 
 src_compile() {
 	GOWORK=off \
