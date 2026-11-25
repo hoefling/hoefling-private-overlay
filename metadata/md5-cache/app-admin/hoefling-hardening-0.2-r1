@@ -1,0 +1,13 @@
+BDEPEND=virtual/pkgconfig
+DEFINED_PHASES=install postinst
+DESCRIPTION=Local hardening: inbound firewall, network sysctls, no LLMNR or remote libvirt
+EAPI=8
+HOMEPAGE=https://github.com/hoefling/hoefling-private-overlay
+INHERIT=systemd
+IUSE=+firewall +libvirt +resolved +sysctl
+KEYWORDS=~amd64
+LICENSE=CC0-1.0
+RDEPEND=firewall? ( net-firewall/nftables )
+SLOT=0
+_eclasses_=toolchain-funcs	58a918e3a42d0156f010dcfd43725be5	systemd	a964c0cbe818b5729da1dbfcee5be861
+_md5_=9720abfb8defdd9c86ffd565b3661544
