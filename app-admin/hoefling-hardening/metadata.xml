@@ -2,6 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person">
+		<email>you@example.org</email>
 		<name>Donald Hoefling</name>
 	</maintainer>
 	<use>
@@ -10,4 +11,7 @@
 		<flag name="sysctl">Disable IP forwarding and ICMP redirects/source routing via sysctl.d</flag>
 		<flag name="resolved">Disable LLMNR and mDNS announcements in systemd-resolved</flag>
 	</use>
+	<upstream>
+		<remote-id type="github">hoefling/hoefling-private-overlay</remote-id>
+	</upstream>
 </pkgmetadata>
